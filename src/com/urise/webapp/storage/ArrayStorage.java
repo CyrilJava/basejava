@@ -16,6 +16,22 @@ public class ArrayStorage {
         resumeCount = 0;
     }
 
+    void update(Resume r) {
+        //TODO check if resume is present
+        boolean uuidNotFound = true;
+        for (int i = 0; i < resumeCount; i++) {
+            if (storage[i].uuid.equals(r.uuid)) {
+                uuidNotFound = false;
+                //update code here
+                break;
+            }
+        }
+        if (uuidNotFound) {
+            System.out.println("Uuid " + r.uuid + " not found");
+        }
+
+    }
+
     void save(Resume r) {
         boolean uuidIsNew = true;
         if (r.uuid == null) {
