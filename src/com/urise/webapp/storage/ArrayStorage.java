@@ -4,9 +4,6 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-import static java.util.Arrays.copyOf;
-
-
 /**
  * Array based storage for Resumes
  */
@@ -17,9 +14,6 @@ public class ArrayStorage {
     private int resumeCount = 0;
 
     public void clear() {
-        /*for (int i = 0; i < resumeCount; i++) {
-            storage[i] = null;
-        }*/
         Arrays.fill(storage, null);
         resumeCount = 0;
     }
@@ -27,13 +21,12 @@ public class ArrayStorage {
     public void update(Resume r) {
         int index = findIndex(r.getUuid());
         if (index >=0) {
-            storage[index].setUuid(r.getUuid() + "_upd");
+            storage[index] = r;
         } else {
             System.out.println("Resume not found");
         }
     }
 
-    //if (overflow) else if (exist) else (save logic)
     public void save(Resume r) {
         if (r.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
@@ -74,12 +67,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        /*Resume[] onlyResumes = new Resume[resumeCount];
-        for (int i = 0; i < resumeCount; i++) {
-            onlyResumes[i] = storage[i];
-        }*/
-        Resume[] onlyResumes = copyOf(storage, resumeCount);
-        return onlyResumes;
+        return java.util.Arrays.copyOf(storage, resumeCount);
     }
 
     public int size() {
