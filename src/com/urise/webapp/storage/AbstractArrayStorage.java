@@ -9,14 +9,13 @@ import com.urise.webapp.model.Resume;
 public abstract class AbstractArrayStorage implements Storage{
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    //public Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int resumeCount = 0;
 
     public int size() {
         return resumeCount;
     }
 
-    public abstract void clear();
+    //public abstract void clear();
 
     public abstract Resume[] getAll();
 

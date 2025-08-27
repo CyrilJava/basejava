@@ -23,7 +23,6 @@ public class ArrayStorage extends AbstractArrayStorage{
             System.out.println("Resume not found");
         }
     }
-
     public void save(Resume r) {
         if (r.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
@@ -54,7 +53,7 @@ public class ArrayStorage extends AbstractArrayStorage{
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return java.util.Arrays.copyOf(storage, resumeCount);
+        return Arrays.copyOf(storage, resumeCount);
     }
 
     protected int findIndex(String uuid){

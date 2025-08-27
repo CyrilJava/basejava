@@ -35,7 +35,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        //return new Resume[0];
+        return Arrays.copyOf(storage, resumeCount);
     }
 
     @Override
