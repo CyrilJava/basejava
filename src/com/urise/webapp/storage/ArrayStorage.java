@@ -10,11 +10,6 @@ import java.util.Arrays;
 
 public class ArrayStorage extends AbstractArrayStorage{
 
-    public void clear() {
-        Arrays.fill(storage, null);
-        resumeCount = 0;
-    }
-
     public void update(Resume r) {
         int index = findIndex(r.getUuid());
         if (index >=0) {
