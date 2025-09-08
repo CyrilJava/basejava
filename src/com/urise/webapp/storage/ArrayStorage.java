@@ -2,61 +2,31 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.Arrays;
-
 /**
  * Array based storage for Resumes
  */
 
-public class ArrayStorage extends AbstractArrayStorage{
-
-    public void update(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (index >=0) {
-            storage[index] = r;
-        } else {
-            System.out.println("Resume not found");
-        }
-    }
-    public void save(Resume r) {
-        if (r.getUuid() == null) {
-            throw new IllegalArgumentException("No uuid found");
-        }
-        int index = findIndex(r.getUuid());
-        if (resumeCount == STORAGE_LIMIT) {
-            System.out.println("Storage is full");
-        } else if (index >= 0) {
-            System.out.println("Resume with uuid = " + r.getUuid() + " already exists");
-        } else {
-            storage[resumeCount] = r;
-            resumeCount++;
-        }
-    }
-
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index >=0) {
-            storage[index] = storage[resumeCount - 1];
-            storage[resumeCount - 1] = null;
-            resumeCount--;
-        } else {
-            System.out.println("Resume with uuid = " + uuid + " not found");
-        }
-    }
-
+public class ArrayStorage extends AbstractArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, resumeCount);
-    }
-
-    protected int findIndex(String uuid){
+    protected int findIndex(String uuid) {
         for (int i = 0; i < resumeCount; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
         return -1; //uuid not found
-   }
+    }
+
+    @Override
+    protected void addResume(Resume r) {
+        storage[resumeCount] = r;
+    }
+
+    @Override
+    protected void delElement(int index) {
+        storage[index] = storage[resumeCount - 1];
+        storage[resumeCount - 1] = null;
+    }
 }

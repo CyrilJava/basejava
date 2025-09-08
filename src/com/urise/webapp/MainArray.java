@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
  */
 public class MainArray {
     private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //private final static Storage ARRAY_STORAGE = new ArrayStorage();
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
@@ -40,6 +41,13 @@ public class MainArray {
                     r = new Resume();
                     r.setUuid(uuid);
                     ARRAY_STORAGE.save(r);
+                    printAll();
+                    break;
+                case "u":
+                case "update":
+                    r = new Resume();
+                    r.setUuid(uuid);
+                    ARRAY_STORAGE.update(r);
                     printAll();
                     break;
                 case "d":
