@@ -14,35 +14,35 @@ public abstract class AbstractArrayStorage implements Storage {
     protected int resumeCount = 0;
 
     public void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0,resumeCount, null);
         resumeCount = 0;
     }
 
-    public void update(Resume r) {
-        int index = findIndex(r.getUuid());
+    public final void update(Resume resume) {
+        int index = findIndex(resume.getUuid());
         if (index >= 0) {
-            storage[index] = r;
+            storage[index] = resume;
         } else {
             System.out.println("Resume not found");
         }
     }
 
-    public void save(Resume r) {
-        if (r.getUuid() == null) {
+    public final void save(Resume resume) {
+        if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
-        //int index = findIndex(r.getUuid());
+        int index = findIndex(resume.getUuid());
         if (resumeCount == STORAGE_LIMIT) {
             System.out.println("Storage is full");
-        } else if (findIndex(r.getUuid()) >= 0) {
-            System.out.println("Resume with uuid = " + r.getUuid() + " already exists");
+        } else if (findIndex(resume.getUuid()) >= 0) {
+            System.out.println("Resume with uuid = " + resume.getUuid() + " already exists");
         } else {
-            addResume(r);
+            addResume(resume, index);
             resumeCount++;
         }
     }
 
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index >= 0) {
             return storage[index];
@@ -52,10 +52,10 @@ public abstract class AbstractArrayStorage implements Storage {
         return null;
     }
 
-    public void delete(String uuid) {
+    public final void delete(String uuid) {
         int index = findIndex(uuid);
         if (index >= 0) {
-            delElement(index);
+            deleteResume(index);
             resumeCount--;
         } else {
             System.out.println("Resume with uuid = " + uuid + " not found");
@@ -72,9 +72,9 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract int findIndex(String uuid);
 
-    protected abstract void addResume(Resume r);
+    protected abstract void addResume(Resume resume, int index);
 
-    protected abstract void delElement(int index);
+    protected abstract void deleteResume(int index);
 
 /*    public void checkNull(Resume r){
         if (r.getUuid() == null) {

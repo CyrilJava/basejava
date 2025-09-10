@@ -1,0 +1,214 @@
+Subject: [PATCH] HW3_review (updated)
+---
+Index: src/com/urise/webapp/storage/ArrayStorage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/com/urise/webapp/storage/ArrayStorage.java b/src/com/urise/webapp/storage/ArrayStorage.java
+--- a/src/com/urise/webapp/storage/ArrayStorage.java	(revision 5bdbab46731628aceed0006e1923a18f628c12b4)
++++ b/src/com/urise/webapp/storage/ArrayStorage.java	(date 1757523900914)
+@@ -7,6 +7,9 @@
+  */
+ 
+ public class ArrayStorage extends AbstractArrayStorage {
++
++    private static final int RESUME_NOT_FOUND = -1;
++
+     /**
+      * @return array, contains only Resumes in storage (without null)
+      */
+@@ -16,16 +19,16 @@
+                 return i;
+             }
+         }
+-        return -1; //uuid not found
++        return RESUME_NOT_FOUND;
+     }
+ 
+     @Override
+-    protected void addResume(Resume r) {
+-        storage[resumeCount] = r;
++    protected void addResume(Resume resume, int index) {
++        storage[resumeCount] = resume;
+     }
+ 
+     @Override
+-    protected void delElement(int index) {
++    protected void deleteResume(int index) {
+         storage[index] = storage[resumeCount - 1];
+         storage[resumeCount - 1] = null;
+     }
+Index: src/com/urise/webapp/storage/AbstractArrayStorage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/com/urise/webapp/storage/AbstractArrayStorage.java b/src/com/urise/webapp/storage/AbstractArrayStorage.java
+--- a/src/com/urise/webapp/storage/AbstractArrayStorage.java	(revision 5bdbab46731628aceed0006e1923a18f628c12b4)
++++ b/src/com/urise/webapp/storage/AbstractArrayStorage.java	(date 1757525155249)
+@@ -14,11 +14,11 @@
+     protected int resumeCount = 0;
+ 
+     public void clear() {
+-        Arrays.fill(storage, null);
++        Arrays.fill(storage, 0, resumeCount, null);
+         resumeCount = 0;
+     }
+ 
+-    public void update(Resume r) {
++    public final void update(Resume r) {
+         int index = findIndex(r.getUuid());
+         if (index >= 0) {
+             storage[index] = r;
+@@ -27,22 +27,23 @@
+         }
+     }
+ 
+-    public void save(Resume r) {
++    public final void save(Resume r) {
+         if (r.getUuid() == null) {
+             throw new IllegalArgumentException("No uuid found");
+         }
+-        //int index = findIndex(r.getUuid());
++
++        int index = findIndex(r.getUuid());
+         if (resumeCount == STORAGE_LIMIT) {
+             System.out.println("Storage is full");
+-        } else if (findIndex(r.getUuid()) >= 0) {
++        } else if (index >= 0) {
+             System.out.println("Resume with uuid = " + r.getUuid() + " already exists");
+         } else {
+-            addResume(r);
++            addResume(r, index);
+             resumeCount++;
+         }
+     }
+ 
+-    public Resume get(String uuid) {
++    public final Resume get(String uuid) {
+         int index = findIndex(uuid);
+         if (index >= 0) {
+             return storage[index];
+@@ -52,10 +53,11 @@
+         return null;
+     }
+ 
+-    public void delete(String uuid) {
++    public final void delete(String uuid) {
+         int index = findIndex(uuid);
+         if (index >= 0) {
+-            delElement(index);
++            deleteResume(index);
++            storage[resumeCount] = null;
+             resumeCount--;
+         } else {
+             System.out.println("Resume with uuid = " + uuid + " not found");
+@@ -72,9 +74,9 @@
+ 
+     protected abstract int findIndex(String uuid);
+ 
+-    protected abstract void addResume(Resume r);
++    protected abstract void addResume(Resume r, int index);
+ 
+-    protected abstract void delElement(int index);
++    protected abstract void deleteResume(int index);
+ 
+ /*    public void checkNull(Resume r){
+         if (r.getUuid() == null) {
+Index: src/com/urise/webapp/storage/SortedArrayStorage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/com/urise/webapp/storage/SortedArrayStorage.java b/src/com/urise/webapp/storage/SortedArrayStorage.java
+--- a/src/com/urise/webapp/storage/SortedArrayStorage.java	(revision 5bdbab46731628aceed0006e1923a18f628c12b4)
++++ b/src/com/urise/webapp/storage/SortedArrayStorage.java	(date 1757525132221)
+@@ -3,59 +3,47 @@
+ import com.urise.webapp.model.Resume;
+ 
+ import java.util.Arrays;
++import java.util.Comparator;
+ 
+ public class SortedArrayStorage extends AbstractArrayStorage {
+-    @Override
+-    public void clear() {
+-        for (int i = 0; i < resumeCount; i++) {
+-            storage[i] = null;
+-        }
+-        resumeCount = 0;
+-    }
+-
+-    @Override //выясняем, что возвращает binarySearch
+-    public Resume get(String uuid) {
+-        int index = findIndex(uuid);
+-        Resume searchKey = new Resume();
+-        searchKey.setUuid(uuid);
+-        if (index >= 0) {
+-            System.out.println("Binary search value [exists] = " + Arrays.binarySearch(storage, 0, resumeCount, searchKey));
+-            return storage[index];
+-        } else {
+-            System.out.println("Binary search value [not exists] = " + Arrays.binarySearch(storage, 0, resumeCount, searchKey));
+-            System.out.println("Resume with uuid = " + uuid + " not found");
+-        }
+-        return null;
+-    }
+ 
+     @Override
+     protected int findIndex(String uuid) {
+         Resume searchKey = new Resume();
+         searchKey.setUuid(uuid);
+-        return Arrays.binarySearch(storage, 0, resumeCount, searchKey);
+-        // массив, начало, конец, искомый элемент
++
++//        Function<Resume, String> resumeFunction = new Function<Resume, String>() {
++//            @Override
++//            public String apply(Resume resume) {
++//                return resume.getUuid();
++//            }
++//        };
++//        return Arrays.binarySearch(storage, 0, resumeCount, searchKey, Comparator.comparing(resumeFunction));
++
++        return Arrays.binarySearch(storage, 0, resumeCount, searchKey, Comparator.comparing(Resume::getUuid));
+     }
+ 
+     @Override
+-    protected void addResume(Resume r) {
+-        int binSearchRes = Arrays.binarySearch(storage, 0, resumeCount, r);
+-        if (resumeCount == 0 || binSearchRes * (-1) > resumeCount) { //дописываем в конец
+-            storage[resumeCount] = r;
+-        } else { //вставка в середину
+-            /*for (int i = resumeCount - 1; i >= Math.abs(binSearchRes) - 1; i--) {
+-                storage[i + 1] = storage[i];
+-            }*/
+-            int newPos = Math.abs(binSearchRes) - 1;
+-            System.arraycopy(storage, newPos, storage, newPos + 1, resumeCount - newPos + 1);
+-            storage[Math.abs(binSearchRes) - 1] = r;
+-        }
++    protected void addResume(Resume resume, int index) {
++        int insertionIndex = -index - 1;
++        System.arraycopy(storage, insertionIndex, storage, insertionIndex + 1, resumeCount - insertionIndex);
++        storage[insertionIndex] = resume;
++
++//        if (resumeCount == 0 || insertionIndex * (-1) > resumeCount) { //дописываем в конец
++//            storage[resumeCount] = resume;
++//        } else { //вставка в середину
++//            /*for (int i = resumeCount - 1; i >= Math.abs(insertionIndex) - 1; i--) {
++//                storage[i + 1] = storage[i];
++//            }*/
++//            int newPos = Math.abs(insertionIndex) - 1;
++//            System.arraycopy(storage, newPos, storage, newPos + 1, resumeCount - newPos + 1);
++//            storage[Math.abs(insertionIndex) - 1] = resume;
++//        }
+     }
+ 
+     @Override
+-    protected void delElement(int index) {
+-        for (int i = index; i < resumeCount; i++) {
+-            storage[i] = storage[i + 1];
+-        }
++    protected void deleteResume(int index) {
++        System.arraycopy(storage, index + 1, storage, index, resumeCount - index - 1);
+     }
+ }
+ 

@@ -7,6 +7,9 @@ import com.urise.webapp.model.Resume;
  */
 
 public class ArrayStorage extends AbstractArrayStorage {
+
+    private static final int RESUME_NOT_FOUND = -1;
+
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -16,16 +19,16 @@ public class ArrayStorage extends AbstractArrayStorage {
                 return i;
             }
         }
-        return -1; //uuid not found
+        return RESUME_NOT_FOUND;
     }
 
     @Override
-    protected void addResume(Resume r) {
-        storage[resumeCount] = r;
+    protected void addResume(Resume resume, int index) {
+        storage[resumeCount] = resume;
     }
 
     @Override
-    protected void delElement(int index) {
+    protected void deleteResume(int index) {
         storage[index] = storage[resumeCount - 1];
         storage[resumeCount - 1] = null;
     }
