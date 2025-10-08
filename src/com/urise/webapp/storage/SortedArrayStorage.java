@@ -6,11 +6,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+    public SortedArrayStorage (){
+        super();
+    }
 
     @Override
     protected int findIndex(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.setUuid(uuid);
+        Resume searchKey = new Resume(uuid);
+        //Resume searchKey = new Resume();
+        //searchKey.setUuid(uuid);
 
 //        Function<Resume, String> resumeFunction = new Function<Resume, String>() {
 //            @Override

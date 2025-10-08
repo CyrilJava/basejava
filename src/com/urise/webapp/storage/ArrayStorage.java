@@ -9,7 +9,9 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     private static final int RESUME_NOT_FOUND = -1;
-
+    public ArrayStorage (){
+        super();
+    }
     /**
      * @return array, contains only Resumes in storage (without null)
      */

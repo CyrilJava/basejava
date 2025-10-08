@@ -30,6 +30,7 @@ public class MainArray {
                 uuid = params[1].intern();
             }
             switch (params[0]) {
+                case "l":
                 case "list":
                     printAll();
                     break;
@@ -38,15 +39,13 @@ public class MainArray {
                     break;
                 case "s":
                 case "save":
-                    r = new Resume();
-                    r.setUuid(uuid);
+                    r = new Resume(uuid);
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
                 case "u":
                 case "update":
-                    r = new Resume();
-                    r.setUuid(uuid);
+                    r = new Resume(uuid);
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;
@@ -63,8 +62,8 @@ public class MainArray {
                     ARRAY_STORAGE.clear();
                     printAll();
                     break;
-                case "exit":
                 case "":
+                case "exit":
                     return;
                 default:
                     System.out.println("Неверная команда.");

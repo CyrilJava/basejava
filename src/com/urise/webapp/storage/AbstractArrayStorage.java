@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -12,18 +15,24 @@ public abstract class AbstractArrayStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int resumeCount = 0;
+    //protected String type;
+    public AbstractArrayStorage (){};
+
+    public AbstractArrayStorage (Storage storage){
+    };
+
 
     public void clear() {
         Arrays.fill(storage, 0,resumeCount, null);
         resumeCount = 0;
     }
-
     public final void update(Resume resume) {
         int index = findIndex(resume.getUuid());
-        if (index >= 0) {
-            storage[index] = resume;
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
+            //System.out.println("Resume not found");
         } else {
-            System.out.println("Resume not found");
+            storage[index] = resume;
         }
     }
 
@@ -33,9 +42,11 @@ public abstract class AbstractArrayStorage implements Storage {
         }
         int index = findIndex(resume.getUuid());
         if (resumeCount == STORAGE_LIMIT) {
-            System.out.println("Storage is full");
+            throw new StorageException("Storage is full", resume.getUuid());
+            //System.out.println("Storage is full");
         } else if (findIndex(resume.getUuid()) >= 0) {
-            System.out.println("Resume with uuid = " + resume.getUuid() + " already exists");
+            throw new ExistStorageException(resume.getUuid());
+            //System.out.println("Resume with uuid = " + resume.getUuid() + " already exists");
         } else {
             addResume(resume, index);
             resumeCount++;
@@ -44,21 +55,21 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public final Resume get(String uuid) {
         int index = findIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
-            System.out.println("Resume with uuid = " + uuid + " not found");
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+            //System.out.println("Resume with uuid = " + uuid + " not found");
         }
-        return null;
+        return storage[index];
     }
 
     public final void delete(String uuid) {
         int index = findIndex(uuid);
-        if (index >= 0) {
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+            //System.out.println("Resume with uuid = " + uuid + " not found");
+        } else {
             deleteResume(index);
             resumeCount--;
-        } else {
-            System.out.println("Resume with uuid = " + uuid + " not found");
         }
     }
 
