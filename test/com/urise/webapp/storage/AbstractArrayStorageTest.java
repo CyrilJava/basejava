@@ -11,7 +11,11 @@ import org.junit.Test;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest {
-    private Storage storage = new ArrayStorage();
+    private Storage storage;
+
+    public AbstractArrayStorageTest(Storage storage) {
+        this.storage = storage;
+    }
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -68,20 +72,18 @@ public abstract class AbstractArrayStorageTest {
     public void saveNull() throws Exception {
         storage.save(new Resume(null));
     }
-    @Test
-    public void arrayFull() throws Exception {
-        for (int i=0; i<9997; i++){
-            storage.save(new Resume(Integer.toString(i)));
-        }
-        fail("Overflow before 10000");
-    }
     @Test(expected = StorageException.class)
     public void arrayOverflow() throws Exception {
-        for (int i=0; i<9998; i++) {
-            storage.save(new Resume(Integer.toString(i)));
+        storage.clear();
+        try {
+            for (int i=0; i<AbstractArrayStorage.STORAGE_LIMIT; i++){
+                storage.save(new Resume(Integer.toString(i)));
+            }
+        } catch (StorageException e) {
+            fail("Overflow before 10000");
         }
+        storage.save(new Resume("aaa")); //overflow
     }
-
     @Test
     public void delete() throws Exception {
         storage.delete(UUID_2);
@@ -95,7 +97,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() throws Exception {
-        Assert.assertSame(new Resume(UUID_2).toString(), storage.get(UUID_2).getUuid());
+        Assert.assertEquals(storage.get(UUID_2),new Resume(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)

@@ -6,9 +6,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-    public SortedArrayStorage (){
-        super();
-    }
 
     @Override
     protected int findIndex(String uuid) {
