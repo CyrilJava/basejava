@@ -15,11 +15,11 @@ public class MainReflection {
         Field field = r.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
         Method[] methods = r.getClass().getDeclaredMethods();
-        for (Method method : methods){
+        for (Method method : methods) {
             System.out.println(method.getName());
         }
-        Field [] fields = r.getClass().getDeclaredFields();
-        for (Field field1:fields){
+        Field[] fields = r.getClass().getDeclaredFields();
+        for (Field field1 : fields) {
             System.out.println(field1.getName());
         }
         System.out.println("----------------");
@@ -28,6 +28,6 @@ public class MainReflection {
         field.set(r, "new_uuid");
         System.out.println(r);
         Method method = r.getClass().getMethod("toString");
-        System.out.println("invoke r.toString via reflection: "+ method.invoke(r));
+        System.out.println("invoke r.toString via reflection: " + method.invoke(r));
     }
 }
