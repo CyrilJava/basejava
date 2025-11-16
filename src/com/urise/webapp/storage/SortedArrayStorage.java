@@ -29,7 +29,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         int insertionIndex = -index - 1;
         System.arraycopy(storage, insertionIndex, storage, insertionIndex + 1, resumeCount - insertionIndex);
         storage[insertionIndex] = resume;
-
+        resumeCount++;
 //        if (resumeCount == 0 || insertionIndex * (-1) > resumeCount) { //дописываем в конец
 //            storage[resumeCount] = resume;
 //        } else { //вставка в середину
@@ -45,6 +45,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteResume(int index) {
         System.arraycopy(storage, index + 1, storage, index, resumeCount - index - 1);
+        resumeCount--;
     }
 }
 

@@ -27,11 +27,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected void addResume(Resume resume, int index) {
         storage[resumeCount] = resume;
+        resumeCount++;
     }
 
     @Override
     protected void deleteResume(int index) {
         storage[index] = storage[resumeCount - 1];
         storage[resumeCount - 1] = null;
+        resumeCount--;
     }
 }
