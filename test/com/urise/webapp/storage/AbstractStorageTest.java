@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractStorageTest {
-    private final Storage storage;
+    public final Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final Resume R1 = new Resume(UUID_1);
     private static final String UUID_2 = "uuid2";
@@ -22,7 +22,6 @@ public abstract class AbstractStorageTest {
     private static final String UUID_4 = "uuid4";
     private static final Resume R4 = new Resume(UUID_4);
 
-    //public AbstractStorageTest() { };
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -30,6 +29,7 @@ public abstract class AbstractStorageTest {
     private void assertSize(int size) {
         assertEquals(size, storage.size());
     }
+
     private void assertGet(Resume resume) {
         Assert.assertEquals(resume, storage.get(resume.getUuid()));
     }
@@ -52,12 +52,14 @@ public abstract class AbstractStorageTest {
         storage.clear();
         assertSize(0);
     }
+
     @Test
     public void update() throws Exception {
         Resume R3U = new Resume(UUID_3);
         storage.update(R3U);
         Assert.assertSame(storage.get(UUID_3), R3U);
     }
+
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() throws Exception {
         storage.update(new Resume("uuid4"));
@@ -85,6 +87,7 @@ public abstract class AbstractStorageTest {
     public void saveNull() throws Exception {
         storage.save(new Resume(null));
     }
+
     @Test(expected = StorageException.class)
     public void arrayOverflow() throws Exception {
         storage.clear();
@@ -108,6 +111,7 @@ public abstract class AbstractStorageTest {
         }
         storage.delete(UUID_2);
     }
+
     @Test
     public void get() throws Exception {
         //Assert.assertEquals(storage.get(UUID_2), new Resume(UUID_2));
