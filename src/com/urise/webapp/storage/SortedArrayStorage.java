@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected int findIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
         //Resume searchKey = new Resume();
         //searchKey.setUuid(uuid);
@@ -25,25 +25,15 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void addResume(Resume resume, int index) {
-        int insertionIndex = -index - 1;
+    protected void insertResume(int index, Resume resume) {
+        int insertionIndex = - index - 1;
         System.arraycopy(storage, insertionIndex, storage, insertionIndex + 1, resumeCount - insertionIndex);
         storage[insertionIndex] = resume;
-        resumeCount++;
-//        if (resumeCount == 0 || insertionIndex * (-1) > resumeCount) { //дописываем в конец
-//            storage[resumeCount] = resume;
-//        } else { //вставка в середину
-//            /*for (int i = resumeCount - 1; i >= Math.abs(insertionIndex) - 1; i--) {
-//                storage[i + 1] = storage[i];
-//            }*/
-//            int newPos = Math.abs(insertionIndex) - 1;
-//            System.arraycopy(storage, newPos, storage, newPos + 1, resumeCount - newPos + 1);
-//            storage[Math.abs(insertionIndex) - 1] = resume;
-//        }
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected void doDelete(Object searchKey) {
+        int index = (int)searchKey;
         System.arraycopy(storage, index + 1, storage, index, resumeCount - index - 1);
         resumeCount--;
     }
