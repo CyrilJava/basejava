@@ -3,56 +3,61 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class MapStorage extends AbstractStorage{
+public class MapStorage extends AbstractStorage {
 
-    HashMap<Integer, Resume> storage = new HashMap<>();
+    HashMap<String, Resume> storage = new HashMap<>();
 
     public MapStorage() {
     }
 
     @Override
     public void clear() {
-
+        storage.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
     public int size() {
-        return 0;
+        return storage.size();
     }
 
     @Override
     protected Object getSearchKey(String uuid) {
-        return null;
+        Resume resume = new Resume(uuid);
+        Object searchKey = new Object();
+        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
+            if (entry.getValue().equals(resume)) {
+                searchKey = entry.getKey();
+                break;
+            }
+        }
+        return searchKey;
     }
 
     @Override
-    protected boolean isExisting(Object searchKey) {
-        return false;
-    }
+    protected boolean isExisting(Object searchKey) { return storage.containsKey(searchKey);  }
 
     @Override
-    protected void doSave(Object searchKey, Resume resume) {
-
-    }
+    protected void doSave(Object searchKey, Resume resume) { storage.put(searchKey.toString(), resume); }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return null;
+        return storage.get((String) searchKey);
     }
 
-    @Override
+    @Override //++
     protected void doUpdate(Object searchKey, Resume resume) {
-
+        storage.put((String) searchKey, resume);
     }
 
-    @Override
+    @Override //++
     protected void doDelete(Object searchKey) {
-
+        storage.remove((String) searchKey);
     }
 }

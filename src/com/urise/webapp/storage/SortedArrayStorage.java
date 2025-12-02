@@ -12,7 +12,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         Resume searchKey = new Resume(uuid);
         //Resume searchKey = new Resume();
         //searchKey.setUuid(uuid);
-
 //        Function<Resume, String> resumeFunction = new Function<Resume, String>() {
 //            @Override
 //            public String apply(Resume resume) {

@@ -17,9 +17,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     public AbstractArrayStorage() {
     }
 
-    //public AbstractArrayStorage(Storage storage) {};
-
-
     public void clear() {
         Arrays.fill(storage, 0, resumeCount, null);
         resumeCount = 0;
@@ -33,12 +30,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, resumeCount);
     }
 
-    @Override
-    protected abstract Object getSearchKey(String uuid);
-
-    @Override
-    protected Resume doGet(Object searchKey) {
-        return storage[(int) searchKey];
+    protected boolean isExisting(Object searchKey) {
+        return (int) searchKey >= 0;
     }
 
     @Override
@@ -51,13 +44,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    protected Resume doGet(Object searchKey) {
+        return storage[(int) searchKey];
+    }
+
+    @Override
     protected void doUpdate(Object searchKey, Resume resume) {
         storage[(int) searchKey] = resume;
     }
 
-    protected boolean isExisting(Object searchKey) {
-        return (int) searchKey >= 0;
-    }
+    @Override
+    protected abstract Object getSearchKey(String uuid);
 
     protected abstract void insertResume(int index, Resume resume);
 }

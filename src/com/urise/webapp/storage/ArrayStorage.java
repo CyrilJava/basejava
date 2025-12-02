@@ -7,11 +7,12 @@ import com.urise.webapp.model.Resume;
  */
 
 public class ArrayStorage extends AbstractArrayStorage {
-
     private static final int RESUME_NOT_FOUND = -1;
-    public ArrayStorage (){
+
+    public ArrayStorage() {
         super();
     }
+
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -31,7 +32,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void doDelete(Object searchKey) {
-        storage[(int)searchKey] = storage[resumeCount - 1];
+        storage[(int) searchKey] = storage[resumeCount - 1];
         storage[resumeCount - 1] = null;
         resumeCount--;
     }

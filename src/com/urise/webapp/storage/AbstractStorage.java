@@ -10,33 +10,16 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract void clear();
 
-/*    public void save(Resume resume) {
+    public final void save(Resume resume) {
         if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
-        int index = findIndex(resume.getUuid());
-        if (this.size() == STORAGE_LIMIT) {
-            throw new StorageException("Storage is full", resume.getUuid());
-
-        } else if (findIndex(resume.getUuid()) >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-
-        } else {
-            addResume(resume, index);
-            //resumeCount++; //только для массивов - нужно переделать addResume
-        }
-    }*/
-
-    public final void save(Resume resume) {
-        /*if (resume.getUuid() == null) {
-            throw new IllegalArgumentException("No uuid found");
-        }
-        Object searchKey = getNotExistingSearchKey(resume.getUuid());*/
-        String id = resume.getUuid();
+        Object searchKey = getNotExistingSearchKey(resume.getUuid());
+/*        String id = resume.getUuid();
         if (id == null) {
             throw new IllegalArgumentException("No uuid found");
         }
-        Object searchKey = getNotExistingSearchKey(id);
+        Object searchKey = getNotExistingSearchKey(id);*/
         doSave(searchKey, resume);
     }
 
@@ -72,9 +55,9 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    public abstract Resume[] getAll();
-
     public abstract int size();
+
+    public abstract Resume[] getAll();
 
     protected abstract Object getSearchKey(String uuid);
 
