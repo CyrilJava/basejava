@@ -2,10 +2,12 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    LinkedList<Resume> storage = new LinkedList<>();
+    //private final List<Resume> storage = new LinkedList<>();
+    private final List<Resume> storage = new ArrayList<>();
 
     public ListStorage() {
     }

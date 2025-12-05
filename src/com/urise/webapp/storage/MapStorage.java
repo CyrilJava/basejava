@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
 
-    HashMap<String, Resume> storage = new HashMap<>();
+    private final Map<String, Resume> storage = new HashMap<>();
 
     public MapStorage() {
     }
@@ -28,8 +28,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
-        Resume resume = new Resume(uuid);
+    protected String getSearchKey(String uuid) {
+/*        Resume resume = new Resume(uuid);
         Object searchKey = new Object();
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             if (entry.getValue().equals(resume)) {
@@ -37,7 +37,8 @@ public class MapStorage extends AbstractStorage {
                 break;
             }
         }
-        return searchKey;
+        return searchKey;*/
+        return uuid;
     }
 
     @Override

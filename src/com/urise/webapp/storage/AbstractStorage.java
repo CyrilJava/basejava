@@ -5,21 +5,13 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    public AbstractStorage() {
-    }
-
-    public abstract void clear();
+    //public AbstractStorage() {    }
 
     public final void save(Resume resume) {
         if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
         Object searchKey = getNotExistingSearchKey(resume.getUuid());
-/*        String id = resume.getUuid();
-        if (id == null) {
-            throw new IllegalArgumentException("No uuid found");
-        }
-        Object searchKey = getNotExistingSearchKey(id);*/
         doSave(searchKey, resume);
     }
 
@@ -58,6 +50,8 @@ public abstract class AbstractStorage implements Storage {
     public abstract int size();
 
     public abstract Resume[] getAll();
+
+    public abstract void clear();
 
     protected abstract Object getSearchKey(String uuid);
 
