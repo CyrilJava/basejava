@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    //private final List<Resume> storage = new LinkedList<>();
+    //  private final List<Resume> storage = new LinkedList<>();
     private final List<Resume> storage = new ArrayList<>();
 
     public ListStorage() {

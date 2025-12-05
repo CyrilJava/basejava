@@ -1,7 +1,7 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ListStorage;
+import com.urise.webapp.storage.MapStorage;
 import com.urise.webapp.storage.Storage;
 
 import java.io.BufferedReader;
@@ -13,8 +13,8 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new ListStorage();
-    //private final static Storage ARRAY_STORAGE = new MapStorage();
+    //private final static Storage ARRAY_STORAGE = new ListStorage();
+    private final static Storage ARRAY_STORAGE = new MapStorage();
     //private final static Storage ARRAY_STORAGE = new ArrayStorage();
     //private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
     public static void main(String[] args) throws IOException {
@@ -86,18 +86,4 @@ public class MainArray {
         }
         System.out.println("----------------------------");
     }
-    /*static void printAll() {
-        System.out.println("----------------------------");
-        if (ARRAY_STORAGE.size() == 0) {
-            System.out.println("Empty");
-        } else {
-            for (int i=0; i< ARRAY_STORAGE.size(); i++) {
-                System.out.println(ARRAY_STORAGE.get(i));
-            }
-            Iterator<Resume> iterator = ARRAY_STORAGE.iterator();
-
-            //while (ARRAY_STORAGE)
-        }
-        System.out.println("----------------------------");
-    }*/
 }
