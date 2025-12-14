@@ -2,14 +2,12 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class MapStorage extends AbstractStorage {
-
+public class MapResumeStorage extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
 
-    public MapStorage() {
+    public MapResumeStorage() {
     }
 
     @Override
@@ -18,8 +16,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        Resume[] arr = storage.values().toArray(new Resume[0]);
+        Arrays.sort(arr, Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return Arrays.asList(arr);
     }
 
     @Override
@@ -29,23 +29,19 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected String getSearchKey(String uuid) {
-/*        Resume resume = new Resume(uuid);
-        Object searchKey = new Object();
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (entry.getValue().equals(resume)) {
-                searchKey = entry.getKey();
-                break;
-            }
-        }
-        return searchKey;*/
-        return uuid;
+        Resume resume = new Resume(uuid);
+        return new StringBuilder().append(resume.getFullName()).append(uuid).toString();
     }
 
     @Override
-    protected boolean isExisting(Object searchKey) { return storage.containsKey(searchKey);  }
+    protected boolean isExisting(Object searchKey) {
+        return storage.containsKey(searchKey);
+    }
 
     @Override
-    protected void doSave(Object searchKey, Resume resume) { storage.put(searchKey.toString(), resume); }
+    protected void doSave(Object searchKey, Resume resume) {
+        storage.put(searchKey.toString(), resume);
+    }
 
     @Override
     protected Resume doGet(Object searchKey) {

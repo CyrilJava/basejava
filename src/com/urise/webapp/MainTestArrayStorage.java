@@ -1,7 +1,7 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.MapStorage;
+import com.urise.webapp.storage.MapUuidStorage;
 import com.urise.webapp.storage.Storage;
 
 /**
@@ -11,7 +11,7 @@ public class MainTestArrayStorage {
     //private final static Storage ARRAY_STORAGE = new ArrayStorage();
     //private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
     //private final static Storage ARRAY_STORAGE = new ListStorage();
-    private final static Storage ARRAY_STORAGE = new MapStorage();
+    private final static Storage ARRAY_STORAGE = new MapUuidStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1");
@@ -42,7 +42,7 @@ public class MainTestArrayStorage {
 
     static void printAll(String name) {
         System.out.println(name);
-        for (Resume r : ARRAY_STORAGE.getAll()) {
+        for (Resume r : ARRAY_STORAGE.getAllSorted()) {
             System.out.println(r);
         }
         System.out.println();

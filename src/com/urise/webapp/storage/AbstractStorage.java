@@ -4,16 +4,26 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
     //public AbstractStorage() {    }
-
     public final void save(Resume resume) {
         if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
         Object searchKey = getNotExistingSearchKey(resume.getUuid());
+        resume.setRandomName();
         doSave(searchKey, resume);
     }
+/*    public final void save(Resume resume, String fullName) { //HW06 для добавления конкретного имени
+        if (resume.getUuid() == null) {
+            throw new IllegalArgumentException("No uuid found");
+        }
+        Object searchKey = getNotExistingSearchKey(resume.getUuid());
+        resume.setFullName(fullName);
+        doSave(searchKey, resume);
+    }*/
 
     public Resume get(String uuid) {
         Object searchKey = getExistingSearchKey(uuid);
@@ -22,6 +32,7 @@ public abstract class AbstractStorage implements Storage {
 
     public void update(Resume resume) {
         Object searchKey = getExistingSearchKey(resume.getUuid());
+        resume.setRandomName();
         doUpdate(searchKey, resume);
     }
 
@@ -49,7 +60,9 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract int size();
 
-    public abstract Resume[] getAll();
+    //public abstract Resume[] getAll();
+
+    public abstract List<Resume> getAllSorted();
 
     public abstract void clear();
 

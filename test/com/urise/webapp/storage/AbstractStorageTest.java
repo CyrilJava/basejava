@@ -7,6 +7,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -36,6 +40,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
+        R1.setFullName("Quentin Quinn"); //HW06 для добавления конкретного имени
+        R2.setFullName("Aaron Adams");
+        R3.setFullName("Kevin Knight");
         storage.save(R1);
         storage.save(R2);
         storage.save(R3);
@@ -64,10 +71,23 @@ public abstract class AbstractStorageTest {
         storage.update(new Resume("uuid4"));
     }
 
-    @Test
+/*    @Test
     public void getAll() throws Exception {
         Resume[] expectedStorage = {R1, R2, R3};
         Assert.assertArrayEquals(storage.getAll(), expectedStorage);
+    }*/
+
+    @Test
+    public void getAllSorted() throws Exception {
+        //старая реализация
+        //Resume[] expectedStorage = {R1, R2, R3};
+        //assertEquals(storage.getAllSorted(), Arrays.asList(expectedStorage));
+        List<Resume> expectedList = new ArrayList<>();
+        expectedList.add(R1);
+        expectedList.add(R2);
+        expectedList.add(R3);
+        expectedList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        assertEquals(storage.getAllSorted(), expectedList);
     }
 
     @Test
