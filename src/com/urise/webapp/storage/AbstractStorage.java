@@ -4,40 +4,39 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class AbstractStorage implements Storage {
+    //protected final Logger log = Logger.getLogger(getClass().getName());
+    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
+
     //public AbstractStorage() {    }
     public final void save(Resume resume) {
+        LOG.info("Save " + resume);
         if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
         Object searchKey = getNotExistingSearchKey(resume.getUuid());
-        resume.setRandomName();
         doSave(searchKey, resume);
     }
-/*    public final void save(Resume resume, String fullName) { //HW06 для добавления конкретного имени
-        if (resume.getUuid() == null) {
-            throw new IllegalArgumentException("No uuid found");
-        }
-        Object searchKey = getNotExistingSearchKey(resume.getUuid());
-        resume.setFullName(fullName);
-        doSave(searchKey, resume);
-    }*/
 
     public Resume get(String uuid) {
+        LOG.info("Get " + uuid);
         Object searchKey = getExistingSearchKey(uuid);
         return doGet(searchKey);
     }
 
     public void update(Resume resume) {
+        LOG.info("Update " + resume);
         Object searchKey = getExistingSearchKey(resume.getUuid());
-        resume.setRandomName();
         doUpdate(searchKey, resume);
     }
 
     @Override
     public void delete(String uuid) {
+        LOG.info("Delete " + uuid);
         Object searchKey = getExistingSearchKey(uuid);
         doDelete(searchKey);
     }
@@ -53,6 +52,7 @@ public abstract class AbstractStorage implements Storage {
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (!isExisting(searchKey)) {
+            LOG.warning("Resume " + uuid + " does not exist");
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
@@ -62,7 +62,16 @@ public abstract class AbstractStorage implements Storage {
 
     //public abstract Resume[] getAll();
 
-    public abstract List<Resume> getAllSorted();
+    protected abstract List<Resume> getAll();
+
+    public List<Resume> getAllSorted() {
+        List<Resume> getAllList = getAll();
+        getAllList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        //Collections.sort(getAllList, Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return getAllList;
+    }
+
+    ;
 
     public abstract void clear();
 

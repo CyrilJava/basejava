@@ -4,7 +4,6 @@ import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     /*private static class ResumeComparator implements Comparator<Resume> {
@@ -15,18 +14,18 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         }*/
     //private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
 
-    @Override
-    public List<Resume> getAllSorted() {
+/*    @Override
+    public List<Resume> getAll() {
         Resume[] arr = Arrays.copyOf(storage, resumeCount);
-        List<Resume> tempList = Arrays.asList(arr);
-        tempList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        //return Arrays.asList(arr);
-        return tempList;
-    }
+        //List<Resume> tempList = Arrays.asList(arr);
+        //tempList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return Arrays.asList(arr);
+        //return tempList;
+    }*/
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
+        Resume searchKey = new Resume(uuid,"dummy");
 /*      Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
         Function<Resume, String> resumeFunction = new Function<Resume, String>() {

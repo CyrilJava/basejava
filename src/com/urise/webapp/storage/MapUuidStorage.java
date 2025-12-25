@@ -22,10 +22,10 @@ public class MapUuidStorage extends AbstractStorage {
     }*/
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] arr = storage.values().toArray(new Resume[0]);
-        Arrays.sort(arr, Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return Arrays.asList(arr);
+    public List<Resume> getAll() {
+        //Resume[] arr = storage.values().toArray(new Resume[0]);
+        //return Arrays.asList(arr);
+        return new ArrayList(storage.values());
     }
 
     @Override

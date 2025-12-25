@@ -3,7 +3,6 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -30,14 +29,14 @@ public class ListStorage extends AbstractStorage {
     }*/
 
     @Override
-    public List<Resume> getAllSorted() {
-        storage.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return storage;
+    public List<Resume> getAll() {
+        //storage.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return new ArrayList<>(storage);
     }
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume r = new Resume(uuid);
+        Resume r = new Resume(uuid,"dummy");
         return storage.indexOf(r);
     }
 

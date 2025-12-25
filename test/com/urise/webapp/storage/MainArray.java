@@ -1,8 +1,6 @@
-package com.urise.webapp;
+package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.MapResumeStorage;
-import com.urise.webapp.storage.Storage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,13 +41,13 @@ public class MainArray {
                     break;
                 case "s":
                 case "save":
-                    r = new Resume(uuid);
+                    r = new Resume(uuid,NamesGenerator.getName(0));
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
                 case "u":
                 case "update":
-                    r = new Resume(uuid);
+                    r = new Resume(uuid,NamesGenerator.getName(0));
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;

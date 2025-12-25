@@ -15,15 +15,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractStorageTest {
-    public final Storage storage;
+    protected final Storage storage;
     private static final String UUID_1 = "uuid1";
-    private static final Resume R1 = new Resume(UUID_1);
+    private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
     private static final String UUID_2 = "uuid2";
-    private static final Resume R2 = new Resume(UUID_2);
+    private static final Resume R2 = new Resume(UUID_2, NamesGenerator.getName(2));
     private static final String UUID_3 = "uuid3";
-    private static final Resume R3 = new Resume(UUID_3);
+    private static final Resume R3 = new Resume(UUID_3, NamesGenerator.getName(3));
     private static final String UUID_4 = "uuid4";
-    private static final Resume R4 = new Resume(UUID_4);
+    private static final Resume R4 = new Resume(UUID_4, NamesGenerator.getName(0));
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -40,9 +40,6 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        R1.setFullName("Quentin Quinn"); //HW06 для добавления конкретного имени
-        R2.setFullName("Aaron Adams");
-        R3.setFullName("Kevin Knight");
         storage.save(R1);
         storage.save(R2);
         storage.save(R3);
@@ -61,20 +58,21 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume R3U = new Resume(UUID_3);
+        Resume R3U = new Resume(UUID_3, NamesGenerator.getName(3));
         storage.update(R3U);
         Assert.assertSame(storage.get(UUID_3), R3U);
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() throws Exception {
-        storage.update(new Resume("uuid4"));
+        storage.update(new Resume("uuid4", NamesGenerator.getName(0)));
     }
 
 /*    @Test
     public void getAll() throws Exception {
-        Resume[] expectedStorage = {R1, R2, R3};
-        Assert.assertArrayEquals(storage.getAll(), expectedStorage);
+        List<Resume> list = storage.getAllSorted();
+        assertEquals(3, list.size());
+        assertEquals(list, Arrays.asList(R1, R2, R3));
     }*/
 
     @Test
@@ -99,12 +97,17 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExist() throws Exception {
-        storage.save(new Resume(UUID_3));
+        storage.save(new Resume(UUID_3, NamesGenerator.getName(3)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void saveNull() throws Exception {
-        storage.save(new Resume(null));
+    @Test(expected = NullPointerException.class)
+    public void saveUuidNull() throws Exception {
+        storage.save(new Resume(null, "a"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void saveFullNameNull() throws Exception {
+        storage.save(new Resume("uuid99", null));
     }
 
     @Test(expected = NotExistStorageException.class)

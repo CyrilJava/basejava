@@ -27,11 +27,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return resumeCount;
     }
 
-    /*public Resume[] getAll() {
-        return Arrays.copyOf(storage, resumeCount);
-    }*/
-
-    public abstract List<Resume> getAllSorted();
+    public List<Resume> getAll(){
+        return Arrays.asList(Arrays.copyOf(storage, resumeCount));
+    };
 
     protected boolean isExisting(Object searchKey) {
         return (int) searchKey >= 0;
