@@ -11,7 +11,12 @@ public class CompanySection extends AbstractSection {
 
     public void printSection() {
         for (int i=0; i<CompanyList.size(); i++) {
-            System.out.printf("%-30s %-30s\n",CompanyList.get(i).Name, CompanyList.get(i).WebSite);
+            Company company = CompanyList.get(i);
+            for (int j=0; j<company.PeriodList.size(); j++) {
+                CompanyPeriod companyPeriod = company.PeriodList.get(j);
+                System.out.printf("%-30s %-40s %tb %tY %tb %tY %-30s %-30s\n",
+                        company.Name, company.WebSite, companyPeriod.StartDate, companyPeriod.StartDate, companyPeriod.EndDate, companyPeriod.EndDate, companyPeriod.Title, companyPeriod.Description);
+            }
             //CompanyList.get(i).Name
         }
 

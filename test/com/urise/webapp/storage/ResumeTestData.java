@@ -68,16 +68,25 @@ public class ResumeTestData {
         CompanySection experience = new CompanySection(companyList);
         r.addSection(SectionType.EXPIRIENCE, experience);
 
-        System.out.printf("Идентификатор: %s\n\n",r.getUuid());
-        System.out.printf("\u001B[33m%s\n\n\u001B[0m",r.getFullName());
-        for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
+        CompanyPeriod сourseraPeriod = new CompanyPeriod("Functional Programming Principles in Scala' by Martin Odersky", "", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.03.2013" ), new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.05.2013" ));
+        List<CompanyPeriod> сourseraPeriodList = new ArrayList<>();
+        сourseraPeriodList.add(сourseraPeriod);
+        Company сoursera = new Company("Coursera", "https://www.coursera.org/course/progfun", сourseraPeriodList);
+        List<Company> eduList = new ArrayList<>();
+        eduList.add(сoursera);
+        CompanySection education = new CompanySection(eduList);
+        r.addSection(SectionType.EDUCATION, education);
+
+        System.out.printf("Идентификатор: %s\n\n",r.getUuid()); //выводим UUiD
+        System.out.printf("\u001B[33m%s\n\n\u001B[0m",r.getFullName()); //выводим имя
+        for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {//выводим контакты
             System.out.print("\u001B[32m" + entry.getKey().getTitle() + ": \u001B[0m");
             System.out.println(entry.getValue());
         }
         System.out.println();
         for (Map.Entry<SectionType, AbstractSection> entry : r.getSections().entrySet()) {
-            System.out.println("\u001B[34m" + entry.getKey().getTitle() + ":\u001B[0m");
-            entry.getValue().printSection();
+            System.out.println("\u001B[34m" + entry.getKey().getTitle() + ":\u001B[0m");//выводим наименование секции
+            entry.getValue().printSection();//выводим данные секции
             System.out.println();
         }
     }
