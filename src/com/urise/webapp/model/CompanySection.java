@@ -1,25 +1,20 @@
 package com.urise.webapp.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CompanySection extends AbstractSection {
-    protected List<Company> CompanyList;
+    protected List<Company> companyList;
 
     public CompanySection(List<Company> companyList) {
-        CompanyList = companyList;
+        this.companyList = companyList;
     }
 
-    public void printSection() {
-        for (int i=0; i<CompanyList.size(); i++) {
-            Company company = CompanyList.get(i);
-            for (int j=0; j<company.PeriodList.size(); j++) {
-                CompanyPeriod companyPeriod = company.PeriodList.get(j);
-                System.out.printf("%-30s %-40s %tb %tY %tb %tY %-30s %-30s\n",
-                        company.Name, company.WebSite, companyPeriod.StartDate, companyPeriod.StartDate, companyPeriod.EndDate, companyPeriod.EndDate, companyPeriod.Title, companyPeriod.Description);
-            }
-            //CompanyList.get(i).Name
-        }
-
+    @Override
+    public String toString() {
+        return companyList.stream().map(Object::toString).collect(Collectors.joining("\n"));
     }
+
+
 
 }

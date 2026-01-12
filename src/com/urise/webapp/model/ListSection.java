@@ -3,15 +3,15 @@ package com.urise.webapp.model;
 import java.util.List;
 
 public class ListSection extends AbstractSection {
-    protected List<String> TextList;
+    protected List<String> textList;
 
     public ListSection(List<String> textList) {
-        TextList = textList;
+        this.textList = textList;
     }
 
-    public void printSection() {
-        for (int i=0; i<TextList.size(); i++) {
-            System.out.println("* " + TextList.get(i));
-        }
+    @Override
+    public String toString() {
+        return String.join("\n* ", textList);
     }
+
 }

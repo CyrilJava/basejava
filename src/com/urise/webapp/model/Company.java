@@ -2,28 +2,29 @@ package com.urise.webapp.model;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Company {
-    protected String Name;
-    protected String WebSite;
-    protected List<CompanyPeriod> PeriodList;
+    protected String name;
+    protected String webSite;
+    protected List<CompanyPeriod> periodList;
 
     public Company(String name, String webSite, List<CompanyPeriod> periodList) {
-        Name = name;
-        WebSite = webSite;
-        PeriodList = periodList;
+        this.name = name;
+        this.webSite = webSite;
+        this.periodList = periodList;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getWebSite() {
-        return WebSite;
+        return webSite;
     }
 
     public List<CompanyPeriod> getPeriodList() {
-        return PeriodList;
+        return periodList;
     }
 
     @Override
@@ -31,11 +32,20 @@ public class Company {
         if (this == o) return true;
         if (!(o instanceof Company)) return false;
         Company company = (Company) o;
-        return Objects.equals(Name, company.Name) && Objects.equals(WebSite, company.WebSite) && Objects.equals(PeriodList, company.PeriodList);
+        return Objects.equals(name, company.name) && Objects.equals(webSite, company.webSite) && Objects.equals(periodList, company.periodList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Name, WebSite, PeriodList);
+        return Objects.hash(name, webSite, periodList);
     }
+
+    @Override
+    public String toString() {
+        /*System.out.printf("%-30s %-40s %tm.%tY - %tm.%tY %-40s %-30s\n",
+                company.name, company.webSite, companyPeriod.startDate, companyPeriod.startDate, companyPeriod.endDate, companyPeriod.endDate, companyPeriod.title, companyPeriod.description);*/
+        //String result = ;
+        return String.format("%-30s %-40s %-40s\n", name, webSite, periodList.stream().map(Object::toString).collect(Collectors.joining("\n")));
+    }
+
 }

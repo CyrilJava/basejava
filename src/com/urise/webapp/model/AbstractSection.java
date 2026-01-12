@@ -11,7 +11,5 @@ public abstract class AbstractSection {
 
     private String Type;
 
-    public abstract void printSection();
-
 }
 

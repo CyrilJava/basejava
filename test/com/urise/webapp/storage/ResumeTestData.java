@@ -59,12 +59,19 @@ public class ResumeTestData {
         ListSection qualifications = new ListSection(qualList);
         r.addSection(SectionType.QUALIFICATIONS, qualifications);
 
-        CompanyPeriod jopPeriod = new CompanyPeriod("Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок.", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.10.2013" ), null);
+        CompanyPeriod jopPeriod = new CompanyPeriod("Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок.", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.10.2014" ), null);
         List<CompanyPeriod> jopPeriodList = new ArrayList<>();
         jopPeriodList.add(jopPeriod);
         Company jop = new Company("Java Online Projects", "http://javaops.ru/", jopPeriodList);
         List<Company> companyList = new ArrayList<>();
         companyList.add(jop);
+
+        CompanyPeriod wrikePeriod = new CompanyPeriod("Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.10.2013" ), new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.01.2016" ));
+        List<CompanyPeriod> wrikePeriodList = new ArrayList<>();
+        wrikePeriodList.add(wrikePeriod);
+        Company wrike = new Company("Wrike", "https://www.wrike.com/", wrikePeriodList);
+        companyList.add(wrike);
+
         CompanySection experience = new CompanySection(companyList);
         r.addSection(SectionType.EXPIRIENCE, experience);
 
@@ -86,7 +93,8 @@ public class ResumeTestData {
         System.out.println();
         for (Map.Entry<SectionType, AbstractSection> entry : r.getSections().entrySet()) {
             System.out.println("\u001B[34m" + entry.getKey().getTitle() + ":\u001B[0m");//выводим наименование секции
-            entry.getValue().printSection();//выводим данные секции
+            //entry.getValue().printSection();//выводим данные секции
+            System.out.println(entry.getValue().toString());
             System.out.println();
         }
     }
