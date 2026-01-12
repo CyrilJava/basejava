@@ -58,7 +58,7 @@ public class MainArray {
                     break;
                 case "g":
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid).getFullName());
+                    System.out.println(ARRAY_STORAGE.get(uuid));
                     break;
                 case "c":
                 case "clear":
@@ -76,7 +76,6 @@ public class MainArray {
     }
 
     static void printAll() {
-        //Resume[] all = ARRAY_STORAGE.getAll();
         List<Resume> all = ARRAY_STORAGE.getAllSorted();
         System.out.println("----------------------------");
         System.out.println(" uuid Name                  ");
@@ -85,7 +84,7 @@ public class MainArray {
         } else {
             for (Resume r : all) {
                 //System.out.println(r);
-                System.out.printf("%5s %s\n",r,r.getFullName());
+                System.out.printf("%5s %s\n",r.getUuid(),r.getFullName());
             }
         }
         System.out.println("----------------------------");

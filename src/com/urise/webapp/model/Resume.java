@@ -1,5 +1,7 @@
 package com.urise.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,12 +14,9 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
 
     private final String fullName;
-    /*private static final String[] names = {"Иванов Александр", "Смирнова Мария", "Кузнецов Дмитрий", "Попова Анна", "Васильев Михаил", "Петрова Екатерина", "Соколов Иван", "Михайлова Ольга", "Новиков Сергей", "Федорова Наталья", "Морозов Андрей", "Волкова Елена", "Алексеев Павел", "Лебедева Татьяна", "Семенов Алексей", "Егорова Ирина", "Павлов Николай", "Козлова Светлана", "Голубев Владимир", "Виноградова Юлия", "Кириллов Артем", "Орлова Анастасия", "Макаров Виктор", "Захарова Оксана", "Зайцев Константин", "Романова Ксения", "Тимофеев Роман", "Фомина Вероника", "Богданов Евгений", "Власова Ангелина", "Савельев Григорий", "Никитина Алёна", "Григорьев Станислав", "Цветкова Валерия", "Рыбаков Даниил", "Данилова Полина", "Маслов Никита", "Жукова Дарья", "Тарасов Игорь", "Белова Василиса", "Белов Тимур", "Кудрявцева Ульяна", "Баранов Святослав", "Архипова Виктория", "Филиппов Вадим", "Степанова Марина", "Комаров Юрий", "Борисова Людмила", "Дмитриев Антон", "Маркова Галина", "Ефимов Георгий", "Горбунова Злата", "Щербаков Фёдор", "Антипова Лидия", "Поляков Максим", "Титова Валентина", "Карпов Руслан", "Медведева Эльвира", "Шестаков Платон", "Калинина Инна", "Осипов Всеволод", "Назарова Раиса", "Матвеев Марк", "Силина Кира", "Вишняков Валерий", "Самсонова Регина", "Герасимов Семён", "Логинова Эмилия", "Трофимов Арсений", "Зимина Лилия", "Ушаков Денис", "Крылова Арина", "Денисов Лев", "Терентьева Алла", "Жуков Ян", "Комарова Нелли", "Воробьев Эдуард", "Носкова Римма", "Лазарев Илья", "Турова Клавдия", "Ершов Тимофей", "Клименко Софья", "Тихонов Петр", "Федосеева Снежана", "Афанасьев Мирон", "Молчанова Изольда", "Власов Матвей", "Игнатьева Вероника", "Давыдов Леонид", "Кузьмина Тамара", "Гусев Захар", "Королева Жанна", "Наумов Олег", "Евдокимова Нонна", "Ширяев Мирослав", "Родионова Эвелина", "Силин Гордей", "Суханова Диана", "Михеев Борис", "Зыкова Лариса"};
 
-    public void setRandomName() {
-        Random rnd = new Random();
-        this.setFullName(Resume.names[rnd.nextInt(100)]);
-    }*/
+    private final Map<ContactType, String> contacts = new EnumMap<ContactType, String>(ContactType.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<SectionType, AbstractSection>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -29,6 +28,9 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
         this.fullName = fullName;
     }
+    /*for (SectionType type : SectionType.values()) {
+        System.out.println(type.name() + " " + type.getTitle());
+    }*/
 
     public String getUuid() {
         return uuid;
@@ -38,9 +40,21 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    /*public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }*/
+    public void addContact(ContactType contactType, String value) {
+        contacts.put(contactType, value);
+    }
+
+    public void addSection(SectionType sectionType, AbstractSection abstractSection) {
+        sections.put(sectionType, abstractSection);
+    }
+
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
 
     @Override
     public boolean equals(Object o) {

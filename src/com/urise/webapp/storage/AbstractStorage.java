@@ -14,7 +14,7 @@ public abstract class AbstractStorage implements Storage {
 
     //public AbstractStorage() {    }
     public final void save(Resume resume) {
-        LOG.info("Save " + resume);
+        //LOG.info("Save " + resume);
         if (resume.getUuid() == null) {
             throw new IllegalArgumentException("No uuid found");
         }
