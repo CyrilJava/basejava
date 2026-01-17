@@ -10,7 +10,7 @@ import java.util.List;
  * Array based storage for Resumes
  */
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int resumeCount = 0;
@@ -31,12 +31,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.asList(Arrays.copyOf(storage, resumeCount));
     };
 
-    protected boolean isExisting(Object searchKey) {
+    protected boolean isExisting(Integer searchKey) {
         return (int) searchKey >= 0;
     }
 
     @Override
-    protected void doSave(Object searchKey, Resume resume) {
+    protected void doSave(Integer searchKey, Resume resume) {
         if (this.size() == STORAGE_LIMIT) {
             throw new StorageException("Storage is full", searchKey.toString());
         }
@@ -45,17 +45,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
+    protected Resume doGet(Integer searchKey) {
         return storage[(int) searchKey];
     }
 
     @Override
-    protected void doUpdate(Object searchKey, Resume resume) {
+    protected void doUpdate(Integer searchKey, Resume resume) {
         storage[(int) searchKey] = resume;
     }
 
     @Override
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract Integer getSearchKey(String uuid);
 
     protected abstract void insertResume(int index, Resume resume);
 }

@@ -12,7 +12,7 @@ public class CompanySection extends AbstractSection {
 
     @Override
     public String toString() {
-        return companyList.stream().map(Object::toString).collect(Collectors.joining("\n"));
+        return companyList.stream().map(Object::toString).collect(Collectors.joining(""));
     }
 
 

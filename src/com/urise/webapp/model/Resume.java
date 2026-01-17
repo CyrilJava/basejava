@@ -40,6 +40,10 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
+    public String getContact(ContactType contactType) {
+        return contacts.get(contactType);
+    }
+
     public void addContact(ContactType contactType, String value) {
         contacts.put(contactType, value);
     }

@@ -1,15 +1,17 @@
 package com.urise.webapp.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class CompanyPeriod {
     protected String title;
     protected String description;
-    protected Date startDate;
-    protected Date endDate;
+    protected LocalDate startDate;
+    protected LocalDate endDate;
 
-    public CompanyPeriod(String title, String description, Date startDate, Date endDate) {
+    public CompanyPeriod(String title, String description, LocalDate startDate, LocalDate endDate) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(startDate, "startDate must not be null");
         this.title = title;
         this.description = description;
         this.startDate = startDate;

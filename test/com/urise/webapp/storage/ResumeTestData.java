@@ -1,9 +1,10 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.model.*;
+import com.urise.webapp.util.DateUtil;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +19,15 @@ import java.util.Map;
  */
 
 public class ResumeTestData {
+
     public static void main(String[] args) throws ParseException {
         Resume r = new Resume("1", "Кислин Григорий");
 
-        r.addContact(ContactType.PHONE,"+7(921) 855-0482");
-        r.addContact(ContactType.EMAIL,"gkislin@yandex.ru");
-        r.addContact(ContactType.LINKEDIN,"https://www.linkedin.com/in/gkislin");
-        r.addContact(ContactType.WEBSITE,"http://gkislin.ru/");
-        r.addContact(ContactType.GITHUB,"https://github.com/gkislin");
+        r.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        r.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        r.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        r.addContact(ContactType.WEBSITE, "http://gkislin.ru/");
+        r.addContact(ContactType.GITHUB, "https://github.com/gkislin");
 
         r.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         r.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
@@ -59,22 +61,22 @@ public class ResumeTestData {
         ListSection qualifications = new ListSection(qualList);
         r.addSection(SectionType.QUALIFICATIONS, qualifications);
 
-        CompanyPeriod jopPeriod = new CompanyPeriod("Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок.", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.10.2014" ), null);
-        List<CompanyPeriod> jopPeriodList = new ArrayList<>();
-        jopPeriodList.add(jopPeriod);
-        Company jop = new Company("Java Online Projects", "http://javaops.ru/", jopPeriodList);
         List<Company> companyList = new ArrayList<>();
-        companyList.add(jop);
-
-        CompanyPeriod wrikePeriod = new CompanyPeriod("Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.10.2013" ), new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.01.2016" ));
-        List<CompanyPeriod> wrikePeriodList = new ArrayList<>();
-        wrikePeriodList.add(wrikePeriod);
-        Company wrike = new Company("Wrike", "https://www.wrike.com/", wrikePeriodList);
-        companyList.add(wrike);
-
+        companyList.add(createCompany("Java Online Projects", "http://javaops.ru/", "Автор проекта", "Создание, организация и проведение Java онлайн проектов и стажировок.",
+                2014, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+        companyList.add(createCompany("Wrike", "https://www.wrike.com/", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
+                2013, 10, 2016, 1));
         CompanySection experience = new CompanySection(companyList);
         r.addSection(SectionType.EXPIRIENCE, experience);
 
+        List<Company> eduList = new ArrayList<>();
+        eduList.add(createCompany("Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala' by Martin Odersky", "",
+                2013, 3, 2013, 5));
+        eduList.add(createCompany("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "",
+                2011, 3, 2011, 4));
+        CompanySection education = new CompanySection(eduList);
+        r.addSection(SectionType.EDUCATION, education);
+/*
         CompanyPeriod сourseraPeriod = new CompanyPeriod("Functional Programming Principles in Scala' by Martin Odersky", "", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.03.2013" ), new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.05.2013" ));
         List<CompanyPeriod> сourseraPeriodList = new ArrayList<>();
         сourseraPeriodList.add(сourseraPeriod);
@@ -83,9 +85,10 @@ public class ResumeTestData {
         eduList.add(сoursera);
         CompanySection education = new CompanySection(eduList);
         r.addSection(SectionType.EDUCATION, education);
+*/
 
-        System.out.printf("Идентификатор: %s\n\n",r.getUuid()); //выводим UUiD
-        System.out.printf("\u001B[33m%s\n\n\u001B[0m",r.getFullName()); //выводим имя
+        System.out.printf("Идентификатор: %s\n\n", r.getUuid()); //выводим UUiD
+        System.out.printf("\u001B[33m%s\n\n\u001B[0m", r.getFullName()); //выводим имя
         for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {//выводим контакты
             System.out.print("\u001B[32m" + entry.getKey().getTitle() + ": \u001B[0m");
             System.out.println(entry.getValue());
@@ -97,5 +100,11 @@ public class ResumeTestData {
             System.out.println(entry.getValue().toString());
             System.out.println();
         }
+    }
+
+    private static Company createCompany(String companyName, String webSite, String periodTitle, String periodDescription, int yearSt, int monthSt, int yearEnd, int monthEnd) {
+        return new Company(companyName, webSite, new ArrayList<CompanyPeriod>() {{
+            add(new CompanyPeriod(periodTitle, periodDescription, DateUtil.of(yearSt, monthSt), DateUtil.of(yearEnd, monthEnd)));
+        }});
     }
 }
