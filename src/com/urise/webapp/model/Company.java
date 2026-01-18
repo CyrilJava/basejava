@@ -45,7 +45,7 @@ public class Company {
         /*System.out.printf("%-30s %-40s %tm.%tY - %tm.%tY %-40s %-30s\n",
                 company.name, company.webSite, companyPeriod.startDate, companyPeriod.startDate, companyPeriod.endDate, companyPeriod.endDate, companyPeriod.title, companyPeriod.description);*/
         //String result = ;
-        return String.format("%-30s %-40s %-40s\n", name, webSite, periodList.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        return String.format("%-30s %-40s\n     %-40s\n", name, webSite, periodList.stream().map(Object::toString).collect(Collectors.joining("\n     ")));
     }
 
 }

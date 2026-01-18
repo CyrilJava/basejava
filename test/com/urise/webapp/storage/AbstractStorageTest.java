@@ -11,19 +11,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.urise.webapp.storage.ResumeTestData.createTestResume;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
     private static final String UUID_1 = "uuid1";
-    private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
+    //private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
+    private static final Resume R1 = createTestResume(UUID_1,NamesGenerator.getName(1));
     private static final String UUID_2 = "uuid2";
-    private static final Resume R2 = new Resume(UUID_2, NamesGenerator.getName(2));
+    private static final Resume R2 = createTestResume(UUID_2,NamesGenerator.getName(2));
     private static final String UUID_3 = "uuid3";
-    private static final Resume R3 = new Resume(UUID_3, NamesGenerator.getName(3));
+    private static final Resume R3 = createTestResume(UUID_3,NamesGenerator.getName(3));
     private static final String UUID_4 = "uuid4";
-    private static final Resume R4 = new Resume(UUID_4, NamesGenerator.getName(0));
+    private static final Resume R4 = createTestResume(UUID_4,NamesGenerator.getName(4));
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -58,7 +60,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume R3U = new Resume(UUID_3, NamesGenerator.getName(0));
+        //Resume R3U = new Resume(UUID_3, NamesGenerator.getName(0));
+        Resume R3U = createTestResume(UUID_3,NamesGenerator.getName(3));
         storage.update(R3U);
         Assert.assertSame(storage.get(UUID_3), R3U);
     }

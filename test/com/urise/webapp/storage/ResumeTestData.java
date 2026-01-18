@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.*;
 import com.urise.webapp.util.DateUtil;
+import com.urise.webapp.util.TransliterateUtil;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) throws ParseException {
         Resume r = new Resume("1", "Кислин Григорий");
+        //Resume r = createTestResume("A","Ефимов Кирилл");
 
         r.addContact(ContactType.PHONE, "+7(921) 855-0482");
         r.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -66,18 +68,15 @@ public class ResumeTestData {
                 2014, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
         companyList.add(createCompany("Wrike", "https://www.wrike.com/", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
                 2013, 10, 2016, 1));
-        CompanySection experience = new CompanySection(companyList);
-        r.addSection(SectionType.EXPIRIENCE, experience);
+        r.addSection(SectionType.EXPIRIENCE, new CompanySection(companyList));
 
         List<Company> eduList = new ArrayList<>();
         eduList.add(createCompany("Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala' by Martin Odersky", "",
                 2013, 3, 2013, 5));
-        eduList.add(createCompany("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "",
-                2011, 3, 2011, 4));
-        CompanySection education = new CompanySection(eduList);
-        r.addSection(SectionType.EDUCATION, education);
-/*
-        CompanyPeriod сourseraPeriod = new CompanyPeriod("Functional Programming Principles in Scala' by Martin Odersky", "", new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.03.2013" ), new SimpleDateFormat( "dd.MM.yyyy" ).parse( "01.05.2013" ));
+        r.addSection(SectionType.EDUCATION, new CompanySection(eduList));
+
+        /*
+        CompanyPeriod сourseraPeriod = new CompanyPeriod("Functional Programming Principles in Scala' by Martin Odersky", "", DateUtil.of(2013, 03), DateUtil.of(2014, 03));
         List<CompanyPeriod> сourseraPeriodList = new ArrayList<>();
         сourseraPeriodList.add(сourseraPeriod);
         Company сoursera = new Company("Coursera", "https://www.coursera.org/course/progfun", сourseraPeriodList);
@@ -85,7 +84,16 @@ public class ResumeTestData {
         eduList.add(сoursera);
         CompanySection education = new CompanySection(eduList);
         r.addSection(SectionType.EDUCATION, education);
-*/
+        */
+
+        eduList.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<CompanyPeriod>(){{
+            add(new CompanyPeriod("Преподаватель", "", DateUtil.of(1996, 9), DateUtil.of(1997, 6)));
+            add(new CompanyPeriod("Аспирантура (программист С, С++)", "", DateUtil.of(1993, 9), DateUtil.of(1996, 7)));
+            add(new CompanyPeriod("Инженер (программист Fortran, C)", "", DateUtil.of(1987, 9), DateUtil.of(1993, 7)));
+        }}));
+        eduList.add(createCompany("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "",
+                2011, 3, 2011, 4));
+
 
         System.out.printf("Идентификатор: %s\n\n", r.getUuid()); //выводим UUiD
         System.out.printf("\u001B[33m%s\n\n\u001B[0m", r.getFullName()); //выводим имя
@@ -106,5 +114,52 @@ public class ResumeTestData {
         return new Company(companyName, webSite, new ArrayList<CompanyPeriod>() {{
             add(new CompanyPeriod(periodTitle, periodDescription, DateUtil.of(yearSt, monthSt), DateUtil.of(yearEnd, monthEnd)));
         }});
+    }
+
+    /*
+    Реализуйте в ResumeTestData метод, который будет принимать uuid и fullName, создавать резюме, заполнять его данными
+    (все секции резюме должны быть заполнены) и возвращать для тестирования в AbstractStorageTest.
+    Используйте его для всех резюме, создаваемых в AbstractStorageTest
+     */
+    public static Resume createTestResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+
+        resume.addContact(ContactType.PHONE, "+7(123)456-7890");
+        resume.addContact(ContactType.EMAIL, TransliterateUtil.makeEmail(fullName) + "@basejava.ru");
+        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + TransliterateUtil.makeEmail(fullName));
+        resume.addContact(ContactType.WEBSITE, "http://" + TransliterateUtil.makeEmail(fullName) + ".basejava.ru/");
+        resume.addContact(ContactType.GITHUB, "https://github.com/" + TransliterateUtil.makeEmail(fullName));
+
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));
+
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<String>() {{
+            add("Достижение 1 соискателя " + uuid);
+            add("Достижение 2 соискателя " + uuid);
+            add("Достижение 3 соискателя " + uuid);
+        }}));
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<String>() {{
+            add("Квалификация 1 соискателя " + uuid);
+            add("Квалификация 2 соискателя " + uuid);
+            add("Квалификация 3 соискателя " + uuid);
+        }}));
+
+        List<Company> companyList = new ArrayList<>();
+        companyList.add(createCompany("Фирма 2", "https://www.company2.com/", "Разработчик", "Разработка java",
+                2021, 8, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+        companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
+                2020, 7, 2021, 7));
+        CompanySection experience = new CompanySection(companyList);
+        resume.addSection(SectionType.EXPIRIENCE, experience);
+
+        List<Company> eduList = new ArrayList<>();
+        eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",
+                2019, 8, 2020, 5));
+        eduList.add(createCompany("МИИИТ", "http://www.mosinstenginftech.ru", "Вычислительные машины, комплексы, системы и сети", "",
+                2013, 9, 2019, 6));
+        CompanySection education = new CompanySection(eduList);
+        resume.addSection(SectionType.EDUCATION, education);
+
+        return resume;
     }
 }

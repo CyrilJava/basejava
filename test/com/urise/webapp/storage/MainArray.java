@@ -1,11 +1,14 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import static com.urise.webapp.storage.ResumeTestData.createTestResume;
 
 /**
  * Interactive test for ArrayStorage implementation
@@ -41,7 +44,8 @@ public class MainArray {
                     break;
                 case "s":
                 case "save":
-                    r = new Resume(uuid,NamesGenerator.getName(0));
+                    //r = new Resume(uuid,NamesGenerator.getName(0));
+                    r = createTestResume(uuid,NamesGenerator.getName(0));
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
@@ -84,7 +88,7 @@ public class MainArray {
         } else {
             for (Resume r : all) {
                 //System.out.println(r);
-                System.out.printf("%5s %s\n",r.getUuid(),r.getFullName());
+                System.out.printf("%5s %-20s %30s\n",r.getUuid(),r.getFullName(), r.getContacts().get(ContactType.EMAIL));
             }
         }
         System.out.println("----------------------------");

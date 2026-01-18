@@ -57,14 +57,15 @@ public class MainFile {
         System.out.println();
         System.out.println("--- 6. Tree - рекурсивный обход и вывод имени файлов в каталогах и подкаталогах---");
         listDirectory(path, 0);
+
+        //System.out.println(TransliterateUtil.makeEmail("Ефимов Кирилл"));
     }
 
     //выводим дерево
     public static void listDirectory(String path, int level) {
-        File dir = new File(path);
-        File[] firstLevelFiles = dir.listFiles();
-        if ((firstLevelFiles != null) && (firstLevelFiles.length > 0)) {
-            for (File file : firstLevelFiles) {
+        File[] rootLevel = new File(path).listFiles();
+        if ((rootLevel != null) && (rootLevel.length > 0)) {
+            for (File file : rootLevel) {
                 for (int i = 0; i < level; i++) {
                     System.out.print("\t");
                 }
