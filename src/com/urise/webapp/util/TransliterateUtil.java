@@ -4,8 +4,8 @@ public class TransliterateUtil {
     public static String makeEmail(String input) {
         char[] charArray = input.toLowerCase().replaceAll(" ", "").toCharArray();
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < charArray.length; i++) {
-            switch (charArray[i]) {
+        for (char c : charArray) {
+            switch (c) {
                 case 'а':
                     result.append("a");
                     break;

@@ -24,46 +24,34 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    @Override //+
+    @Override //++
     public int size() {
-        File[] list = directory.listFiles();
         int i = 0;
-        for (File file : list) {
+        for (File file : getlistfiles())
             if (!file.isDirectory()) {
                 i++;
             }
-        }
         return i; //сколько файлов
     }
 
-    @Override //+
+    @Override //++
     protected List<Resume> getAll() {
-        String[] list = directory.list();
         List<Resume> result = new ArrayList<>();
-        if (list != null && list.length > 0) {
-            for (File file : Objects.requireNonNull(directory.listFiles())) {
-                if (!file.isDirectory()){
-                    try {
-                        result.add(doRead(file));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+        for (File file : getlistfiles()) {
+            try {
+                result.add(doRead(file));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         return result; // читает резюме из всех файлов каталога
     }
 
-    @Override //+
+    @Override //++
     public void clear() {
-        //удалить все файлы
-        String[] list = directory.list();
-        if (list != null && list.length > 0) {
-            for (File file : Objects.requireNonNull(directory.listFiles())) {
-                file.delete();
-            }
+        for (File file : getlistfiles()) {
+            doDelete(file);
         }
-
     }
 
     @Override //ok
@@ -87,7 +75,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override //+
-    protected Resume doGet(File searchKey) {
+    protected Resume doGet(File searchKey) throws RuntimeException {
         try {
             return doRead(searchKey);
         } catch (IOException e) {
@@ -105,9 +93,29 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override //+
-    protected void doDelete(File searchKey) {
-        //удаляет файл
-        searchKey.delete();
+    protected void doDelete(File searchKey) throws StorageException {
+        if (!searchKey.delete()) {
+            throw new StorageException("File can not be deleted", searchKey.getName(), new IOException("File exists but cannot be deleted"));
+        }
+    }
+
+    protected File[] getlistfiles() {
+        // сделать метод getlistfiles
+        File[] list = directory.listFiles();
+        if (list != null && list.length > 0) {
+            return list;
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    public File[] listFilesSafe(File directory) {
+        if (directory == null || !directory.exists() || !directory.isDirectory()) {
+            return new File[0];
+        }
+
+        File[] files = directory.listFiles();
+        return files != null ? files : new File[0];
     }
 
     protected abstract void doWrite(Resume resume, File searchKey) throws IOException;

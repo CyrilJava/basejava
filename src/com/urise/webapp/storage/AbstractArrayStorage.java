@@ -32,26 +32,26 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     };
 
     protected boolean isExisting(Integer searchKey) {
-        return (int) searchKey >= 0;
+        return searchKey >= 0;
     }
 
     @Override
     protected void doSave(Integer searchKey, Resume resume) {
         if (this.size() == STORAGE_LIMIT) {
-            throw new StorageException("Storage is full", searchKey.toString());
+            throw new StorageException("Storage is full", resume.getUuid());
         }
-        insertResume((int) searchKey, resume);
+        insertResume(searchKey, resume);
         resumeCount++;
     }
 
     @Override
     protected Resume doGet(Integer searchKey) {
-        return storage[(int) searchKey];
+        return storage[searchKey];
     }
 
     @Override
     protected void doUpdate(Integer searchKey, Resume resume) {
-        storage[(int) searchKey] = resume;
+        storage[searchKey] = resume;
     }
 
     @Override
