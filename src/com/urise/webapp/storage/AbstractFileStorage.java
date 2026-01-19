@@ -27,7 +27,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override //++
     public int size() {
         int i = 0;
-        for (File file : getlistfiles())
+        for (File file : getListFiles())
             if (!file.isDirectory()) {
                 i++;
             }
@@ -37,7 +37,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override //++
     protected List<Resume> getAll() {
         List<Resume> result = new ArrayList<>();
-        for (File file : getlistfiles()) {
+        for (File file : getListFiles()) {
             try {
                 result.add(doRead(file));
             } catch (IOException e) {
@@ -49,7 +49,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override //++
     public void clear() {
-        for (File file : getlistfiles()) {
+        for (File file : getListFiles()) {
             doDelete(file);
         }
     }
@@ -99,23 +99,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected File[] getlistfiles() {
-        // сделать метод getlistfiles
+    protected File[] getListFiles() {
         File[] list = directory.listFiles();
         if (list != null && list.length > 0) {
             return list;
         } else {
             throw new RuntimeException();
         }
-    }
-
-    public File[] listFilesSafe(File directory) {
-        if (directory == null || !directory.exists() || !directory.isDirectory()) {
-            return new File[0];
-        }
-
-        File[] files = directory.listFiles();
-        return files != null ? files : new File[0];
     }
 
     protected abstract void doWrite(Resume resume, File searchKey) throws IOException;
