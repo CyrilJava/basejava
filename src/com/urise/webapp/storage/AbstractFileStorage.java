@@ -28,9 +28,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public int size() {
         int i = 0;
         for (File file : getListFiles())
-            if (!file.isDirectory()) {
+            //if (!file.isDirectory()) {
                 i++;
-            }
+            //}
         return i; //сколько файлов
     }
 
@@ -38,11 +38,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected List<Resume> getAll() {
         List<Resume> result = new ArrayList<>();
         for (File file : getListFiles()) {
-            try {
+            /*try {
                 result.add(doRead(file));
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
+            result.add(doGet(file));
         }
         return result; // читает резюме из всех файлов каталога
     }
@@ -101,11 +102,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected File[] getListFiles() {
         File[] list = directory.listFiles();
-        if (list != null && list.length > 0) {
+        /*if (list != null && list.length > 0) {
             return list;
         } else {
             throw new RuntimeException();
+        }*/
+        if (list == null) {
+            throw new RuntimeException();
         }
+        return list;
+
     }
 
     protected abstract void doWrite(Resume resume, File searchKey) throws IOException;
