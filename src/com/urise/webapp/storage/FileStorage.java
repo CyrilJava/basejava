@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
-
+public class FileStorage extends AbstractStorage<File> { //Context
     private final File directory;
 
-    protected AbstractFileStorage(File directory) {
+    SerializeStrategy serializeStrategy;
+
+    protected FileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not a dir");
@@ -21,6 +22,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+        this.serializeStrategy = new Strategy();
     }
 
     @Override //++
@@ -69,7 +71,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             searchKey.createNewFile();
             //doWrite(resume, searchKey);
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
+            serializeStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("I/O error", searchKey.getName(), e);
         }
@@ -79,7 +81,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected Resume doGet(File searchKey) throws RuntimeException {
         try {
             //return doRead(searchKey);
-            return doRead(new BufferedInputStream(new FileInputStream(searchKey)));
+            return serializeStrategy.doRead(new BufferedInputStream(new FileInputStream(searchKey)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -88,7 +90,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override //+
     protected void doUpdate(File searchKey, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
+            serializeStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("I/O error", searchKey.getName(), e);
         }
@@ -118,7 +120,4 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     //protected abstract void doWrite(Resume resume, File searchKey) throws IOException;
 
     //protected abstract Resume doRead(File searchKey) throws IOException;
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
 }
