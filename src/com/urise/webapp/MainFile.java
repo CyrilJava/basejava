@@ -43,22 +43,16 @@ public class MainFile {
         try (Stream<Path> stream = Files.walk(Paths.get(path))) {
             stream.filter(Files::isRegularFile)
                     .forEach(System.out::println);// полное имя
-                    //.forEach(x -> System.out.println(x.getFileName()));// только имя файла
+            //.forEach(x -> System.out.println(x.getFileName()));// только имя файла
         }
-        /*
-        System.out.println("--- 6. ---");
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file2 : files) {
-                System.out.println(file2.getName());
-            }
-        }*/
         System.out.println();
         System.out.println("--- 6. Tree - рекурсивный обход и вывод имени файлов в каталогах и подкаталогах---");
-        listDirectory(path, 0);
+        //String treePath = "../basejava/src";
+        //String treePath = "../basejava/src/com/urise/webapp";
+        String treePath = "D:\\Test";
+        listDirectory(treePath, 0);
+        //listDirOnly(treePath, 0);
 
-        //System.out.println(TransliterateUtil.makeEmail("Ефимов Кирилл"));
     }
 
     //выводим дерево
@@ -78,4 +72,19 @@ public class MainFile {
             }
         }
     }
+
+    /*public static void listDirOnly(String path, int level) {
+        File[] rootLevel = new File(path).listFiles();
+        if ((rootLevel != null) && (rootLevel.length > 0)) {
+            for (File file : rootLevel) {
+                if (file.isDirectory()) {
+                    for (int i = 0; i < level; i++) {
+                        System.out.print("\t");
+                    }
+                    System.out.println("╚ " + file.getName());
+                    listDirOnly(file.getAbsolutePath(), level + 1);
+                }
+            }
+        }
+    }*/
 }

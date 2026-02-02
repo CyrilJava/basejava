@@ -19,7 +19,9 @@ public class MainArray {
     //private final static Storage ARRAY_STORAGE = new MapResumeStorage();
     //private final static Storage ARRAY_STORAGE = new MapUuidStorage();
     //private final static Storage ARRAY_STORAGE = new ArrayStorage();
-    private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //private final static Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\basejava\\mainstorage"));
+    private final static Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;

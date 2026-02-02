@@ -86,10 +86,10 @@ public class ResumeTestData {
         r.addSection(SectionType.EDUCATION, education);
         */
 
-        eduList.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<CompanyPeriod>(){{
-            add(new CompanyPeriod("Преподаватель", "", DateUtil.of(1996, 9), DateUtil.of(1997, 6)));
-            add(new CompanyPeriod("Аспирантура (программист С, С++)", "", DateUtil.of(1993, 9), DateUtil.of(1996, 7)));
-            add(new CompanyPeriod("Инженер (программист Fortran, C)", "", DateUtil.of(1987, 9), DateUtil.of(1993, 7)));
+        eduList.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<Company.CompanyPeriod>(){{
+            add(new Company.CompanyPeriod("Преподаватель", "", DateUtil.of(1996, 9), DateUtil.of(1997, 6)));
+            add(new Company.CompanyPeriod("Аспирантура (программист С, С++)", "", DateUtil.of(1993, 9), DateUtil.of(1996, 7)));
+            add(new Company.CompanyPeriod("Инженер (программист Fortran, C)", "", DateUtil.of(1987, 9), DateUtil.of(1993, 7)));
         }}));
         eduList.add(createCompany("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "",
                 2011, 3, 2011, 4));
@@ -111,8 +111,8 @@ public class ResumeTestData {
     }
 
     private static Company createCompany(String companyName, String webSite, String periodTitle, String periodDescription, int yearSt, int monthSt, int yearEnd, int monthEnd) {
-        return new Company(companyName, webSite, new ArrayList<CompanyPeriod>() {{
-            add(new CompanyPeriod(periodTitle, periodDescription, DateUtil.of(yearSt, monthSt), DateUtil.of(yearEnd, monthEnd)));
+        return new Company(companyName, webSite, new ArrayList<Company.CompanyPeriod>() {{
+            add(new Company.CompanyPeriod(periodTitle, periodDescription, DateUtil.of(yearSt, monthSt), DateUtil.of(yearEnd, monthEnd)));
         }});
     }
 
