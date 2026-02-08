@@ -14,15 +14,16 @@ public class Company implements Serializable {
     protected List<CompanyPeriod> periodList;
 
     public Company(String name, String webSite, List<CompanyPeriod> periodList) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(webSite, "webSite must not be null");
+        Objects.requireNonNull(periodList, "periodList must not be null");
         this.name = name;
         this.webSite = webSite;
         this.periodList = periodList;
     }
 
     public Company(String name, String webSite, CompanyPeriod... companyPeriods) {//конструктор с передачей множества периодов
-        this.name = name;
-        this.webSite = webSite;
-        this.periodList = Arrays.asList(companyPeriods);
+        new Company(name, webSite, Arrays.asList(companyPeriods));
     }
 
     public String getName() {

@@ -7,7 +7,6 @@ import com.urise.webapp.model.Resume;
  */
 
 public class ArrayStorage extends AbstractArrayStorage {
-    private static final int RESUME_NOT_FOUND = -1;
 
     public ArrayStorage() {
         super();
@@ -16,12 +15,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-/*    @Override
-    public List<Resume> getAll() {
-        Resume[] arr = Arrays.copyOf(storage, resumeCount);
-        //Arrays.sort(arr,Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return Arrays.asList(arr);
-    }*/
 
     protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < resumeCount; i++) {
@@ -29,7 +22,7 @@ public class ArrayStorage extends AbstractArrayStorage {
                 return i;
             }
         }
-        return RESUME_NOT_FOUND;
+        return -1;//RESUME_NOT_FOUND
     }
 
     @Override
@@ -38,8 +31,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(Integer searchKey) {
-        storage[(int) searchKey] = storage[resumeCount - 1];
+    protected void doDelete(Integer index) {
+        storage[index] = storage[resumeCount - 1];
         storage[resumeCount - 1] = null;
         resumeCount--;
     }

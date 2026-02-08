@@ -1,27 +1,17 @@
-package com.urise.webapp.storage;
+package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 import com.urise.webapp.util.DateUtil;
 import com.urise.webapp.util.TransliterateUtil;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/*
-    PERSONAL("Личные"),
-    OBJECTIVE("Позиция"),
-    ACHIEVEMENT("Достижения"),
-    QUALIFICATIONS("Квалификация"),
-    EXPIRIENCE("Опыт работы"),
-    EDUCATION("Образование");
- */
-
 public class ResumeTestData {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) {
         Resume r = new Resume("1", "Кислин Григорий");
         //Resume r = createTestResume("A","Ефимов Кирилл");
 
@@ -68,23 +58,12 @@ public class ResumeTestData {
                 2014, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
         companyList.add(createCompany("Wrike", "https://www.wrike.com/", "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
                 2013, 10, 2016, 1));
-        r.addSection(SectionType.EXPIRIENCE, new CompanySection(companyList));
+        r.addSection(SectionType.EXPERIENCE, new CompanySection(companyList));
 
         List<Company> eduList = new ArrayList<>();
         eduList.add(createCompany("Coursera", "https://www.coursera.org/course/progfun", "Functional Programming Principles in Scala' by Martin Odersky", "",
                 2013, 3, 2013, 5));
         r.addSection(SectionType.EDUCATION, new CompanySection(eduList));
-
-        /*
-        CompanyPeriod сourseraPeriod = new CompanyPeriod("Functional Programming Principles in Scala' by Martin Odersky", "", DateUtil.of(2013, 03), DateUtil.of(2014, 03));
-        List<CompanyPeriod> сourseraPeriodList = new ArrayList<>();
-        сourseraPeriodList.add(сourseraPeriod);
-        Company сoursera = new Company("Coursera", "https://www.coursera.org/course/progfun", сourseraPeriodList);
-        List<Company> eduList = new ArrayList<>();
-        eduList.add(сoursera);
-        CompanySection education = new CompanySection(eduList);
-        r.addSection(SectionType.EDUCATION, education);
-        */
 
         eduList.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<Company.CompanyPeriod>(){{
             add(new Company.CompanyPeriod("Преподаватель", "", DateUtil.of(1996, 9), DateUtil.of(1997, 6)));
@@ -150,7 +129,7 @@ public class ResumeTestData {
         companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
                 2020, 7, 2021, 7));
         CompanySection experience = new CompanySection(companyList);
-        resume.addSection(SectionType.EXPIRIENCE, experience);
+        resume.addSection(SectionType.EXPERIENCE, experience);
 
         List<Company> eduList = new ArrayList<>();
         eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",

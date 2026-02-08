@@ -8,34 +8,28 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class AbstractStorage<SK> implements Storage {
-    //protected final Logger log = Logger.getLogger(getClass().getName());
+public abstract class AbstractStorage<SK> implements com.urise.webapp.storage.Storage {
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     public final void save(Resume resume) {
-        //LOG.info("Save " + resume);
-        if (resume.getUuid() == null) {
-            throw new IllegalArgumentException("No uuid found");
-        }
         SK searchKey = getNotExistingSearchKey(resume.getUuid());
         doSave(searchKey, resume);
     }
 
     public Resume get(String uuid) {
-        LOG.info("Get " + uuid);
+        //LOG.info("Get " + uuid);
         SK searchKey = getExistingSearchKey(uuid);
         return doGet(searchKey);
     }
 
     public void update(Resume resume) {
-        LOG.info("Update " + resume);
+        //LOG.info("Update " + resume);
         SK searchKey = getExistingSearchKey(resume.getUuid());
         doUpdate(searchKey, resume);
     }
 
-    @Override
     public void delete(String uuid) {
-        LOG.info("Delete " + uuid);
+        //LOG.info("Delete " + uuid);
         SK searchKey = getExistingSearchKey(uuid);
         doDelete(searchKey);
     }
@@ -57,22 +51,16 @@ public abstract class AbstractStorage<SK> implements Storage {
         return searchKey;
     }
 
-    public abstract int size();
-
-    //public abstract Resume[] getAll();
-
-    protected abstract List<Resume> getAll();
+//    public abstract int size();
+//    public abstract void clear();s
 
     public List<Resume> getAllSorted() {
-        List<Resume> getAllList = getAll();
-        getAllList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        //Collections.sort(getAllList, Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        return getAllList;
+        List<Resume> resumes = getAll();
+        resumes.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return resumes;
     }
 
-    ;
-
-    public abstract void clear();
+    protected abstract List<Resume> getAll();
 
     protected abstract SK getSearchKey(String uuid);
 

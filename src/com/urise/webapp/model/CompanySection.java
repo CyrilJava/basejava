@@ -5,15 +5,15 @@ import java.util.stream.Collectors;
 
 public class CompanySection extends AbstractSection {
     private static final long serialVersionUID = 4270071768600374419L;
-    protected List<Company> companyList;
+    protected List<Company> companies;
 
-    public CompanySection(List<Company> companyList) {
-        this.companyList = companyList;
+    public CompanySection(List<Company> companies) {
+        this.companies = companies;
     }
 
     @Override
     public String toString() {
-        return companyList.stream().map(Object::toString).collect(Collectors.joining(""));
+        return companies.stream().map(Object::toString).collect(Collectors.joining(""));
     }
 
 

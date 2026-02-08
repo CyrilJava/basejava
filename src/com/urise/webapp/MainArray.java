@@ -1,14 +1,16 @@
-package com.urise.webapp.storage;
+package com.urise.webapp;
 
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.Storage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static com.urise.webapp.storage.ResumeTestData.createTestResume;
+import static com.urise.webapp.ResumeTestData.createTestResume;
 
 /**
  * Interactive test for ArrayStorage implementation
@@ -19,9 +21,9 @@ public class MainArray {
     //private final static Storage ARRAY_STORAGE = new MapResumeStorage();
     //private final static Storage ARRAY_STORAGE = new MapUuidStorage();
     //private final static Storage ARRAY_STORAGE = new ArrayStorage();
-    //private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
+    private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
     //private final static Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\basejava\\mainstorage"));
-    private final static Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
+    //private final static Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
@@ -47,13 +49,13 @@ public class MainArray {
                 case "s":
                 case "save":
                     //r = new Resume(uuid,NamesGenerator.getName(0));
-                    r = createTestResume(uuid,NamesGenerator.getName(0));
+                    r = createTestResume(uuid, NamesGenerator.getName(0));
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
                 case "u":
                 case "update":
-                    r = new Resume(uuid,NamesGenerator.getName(0));
+                    r = new Resume(uuid, NamesGenerator.getName(0));
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;
