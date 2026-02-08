@@ -1,16 +1,15 @@
 package com.urise.webapp.storage;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
+@Suite
+@SelectClasses({
         ArrayStorageTest.class,
         SortedArrayStorageTest.class,
         ListStorageTest.class,
         MapUuidStorageTest.class,
         MapResumeStorageTest.class,
-        //ObjectStreamStorageTest.class,
         FileStorageTest.class,
         PathStorageTest.class
 })

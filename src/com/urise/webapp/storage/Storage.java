@@ -10,10 +10,8 @@ import java.util.List;
 
 public interface Storage {
 
-    void clear();
 
     void save(Resume r);
-    //void save(Resume r, String fullName); //HW06 для добавления конкретного имени
 
     Resume get(String uuid);
 
@@ -25,6 +23,9 @@ public interface Storage {
      * @return array, contains only Resumes in storage (without null)
      */
     //Resume[] getAll();
-    List<Resume> getAllSorted();
     int size();
+
+    List<Resume> getAllSorted();
+
+    void clear();
 }

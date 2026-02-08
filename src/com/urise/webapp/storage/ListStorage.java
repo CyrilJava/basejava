@@ -36,13 +36,18 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume r = new Resume(uuid,"dummy");
-        return storage.indexOf(r);
+        for (int i = 0; i < storage.size(); i++) {
+            if (uuid.equals(storage.get(i).getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
+
 
     @Override
     protected boolean isExisting(Integer searchKey) {
-        return (int) searchKey >= 0;
+        return searchKey >= 0;
     }
 
     @Override
