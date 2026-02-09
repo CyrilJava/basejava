@@ -1,36 +1,36 @@
 package com.urise.webapp;
 
+import static com.urise.webapp.ResumeTestData.createTestResume;
+
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.ArrayStorage;
 import com.urise.webapp.storage.Storage;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static com.urise.webapp.ResumeTestData.createTestResume;
-
 /**
- * Interactive test for ArrayStorage implementation
+ * Interactive test for ArrayStorage implementation.
  * (just run, no need to understand)
  */
 public class MainArray {
-    //private final static Storage ARRAY_STORAGE = new ListStorage();
-    //private final static Storage ARRAY_STORAGE = new MapResumeStorage();
-    //private final static Storage ARRAY_STORAGE = new MapUuidStorage();
-    //private final static Storage ARRAY_STORAGE = new ArrayStorage();
-    private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
-    //private final static Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\basejava\\mainstorage"));
-    //private final static Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
+    //private static final Storage ARRAY_STORAGE = new ListStorage();
+    //private static final Storage ARRAY_STORAGE = new MapResumeStorage();
+    //private static final Storage ARRAY_STORAGE = new MapUuidStorage();
+    private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //private static final Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\basejava\\mainstorage"));
+    //private static final Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
+
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
             System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (/*params.length < 1 || */params.length > 2) {
+            if (params.length > 2) {
                 System.out.println("Неверная команда.");
                 continue;
             }
@@ -48,7 +48,7 @@ public class MainArray {
                     break;
                 case "s":
                 case "save":
-                    //r = new Resume(uuid,NamesGenerator.getName(0));
+                    // r = new Resume(uuid,NamesGenerator.getName(0));
                     r = createTestResume(uuid, NamesGenerator.getName(0));
                     ARRAY_STORAGE.save(r);
                     printAll();
@@ -87,12 +87,11 @@ public class MainArray {
         List<Resume> all = ARRAY_STORAGE.getAllSorted();
         System.out.println("----------------------------");
         System.out.println(" uuid Name                  ");
-        if (all.size() == 0) {
+        if (all.isEmpty()) {
             System.out.println("Empty");
         } else {
             for (Resume r : all) {
-                //System.out.println(r);
-                System.out.printf("%5s %-20s %30s\n",r.getUuid(),r.getFullName(), r.getContacts().get(ContactType.EMAIL));
+                System.out.printf("%5s %-20s %30s\n", r.getUuid(), r.getFullName(), r.getContacts().get(ContactType.EMAIL));
             }
         }
         System.out.println("----------------------------");

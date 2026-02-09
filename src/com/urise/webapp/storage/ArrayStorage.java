@@ -2,19 +2,10 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-/**
- * Array based storage for Resumes
- */
-
 public class ArrayStorage extends AbstractArrayStorage {
-
     public ArrayStorage() {
         super();
     }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
 
     protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < resumeCount; i++) {
@@ -22,7 +13,7 @@ public class ArrayStorage extends AbstractArrayStorage {
                 return i;
             }
         }
-        return -1;//RESUME_NOT_FOUND
+        return -1; // RESUME_NOT_FOUND
     }
 
     @Override
@@ -31,9 +22,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void doDelete(Integer index) {
+    protected void reduceArray(Integer index) {
         storage[index] = storage[resumeCount - 1];
-        storage[resumeCount - 1] = null;
-        resumeCount--;
     }
 }
