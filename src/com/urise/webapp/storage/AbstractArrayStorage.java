@@ -2,12 +2,11 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Array based storage for Resumes
+ * Array based storage for Resumes.
  */
 
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
@@ -24,7 +23,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return resumeCount;
     }
 
-    public List<Resume> getAll(){
+    public List<Resume> getAll() {
         return Arrays.asList(Arrays.copyOf(storage, resumeCount));
     }
 
@@ -51,5 +50,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         storage[index] = resume;
     }
 
+    @Override
+    protected void doDelete(Integer index) {
+        reduceArray(index);
+        storage[resumeCount - 1] = null;
+        resumeCount--;
+    }
+
     protected abstract void insertResume(int index, Resume resume);
+
+    protected abstract void reduceArray(Integer index);
 }
