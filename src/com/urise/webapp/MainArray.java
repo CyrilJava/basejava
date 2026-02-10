@@ -16,13 +16,13 @@ import java.util.List;
  * (just run, no need to understand)
  */
 public class MainArray {
-    //private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final Storage ARRAY_STORAGE = new ListStorage();
     //private static final Storage ARRAY_STORAGE = new MapResumeStorage();
     //private static final Storage ARRAY_STORAGE = new MapUuidStorage();
     //private static final Storage ARRAY_STORAGE = new ArrayStorage();
     //private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
     //private static final Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\mainstorage"));
-    private static final Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\mainstorage");
+    //private static final Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\mainstorage");
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
