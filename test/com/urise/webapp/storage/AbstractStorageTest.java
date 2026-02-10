@@ -20,7 +20,7 @@ public abstract class AbstractStorageTest {
     protected final com.urise.webapp.storage.Storage storage;
     protected static final File STORAGE_DIR = new File("D:\\Study\\Java2025\\basejava\\storage");
     private static final String UUID_1 = "uuid1";
-    //private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
+    // private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
     private static final Resume R1 = createTestResume(UUID_1, NamesGenerator.getName(1));
     private static final String UUID_2 = "uuid2";
     private static final Resume R2 = createTestResume(UUID_2, NamesGenerator.getName(2));
@@ -64,7 +64,8 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume R3U = createTestResume(UUID_3, NamesGenerator.getName(3));
         storage.update(R3U);
-        assertEquals(createTestResume(UUID_3, NamesGenerator.getName(3)), storage.get(UUID_3));
+        //assertSame(R3U, storage.get(UUID_3));
+        assertGet(R3U);
     }
 
     @Test//(expected = NotExistStorageException.class)
@@ -76,9 +77,6 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        //старая реализация
-        //Resume[] expectedStorage = {R1, R2, R3};
-        //Assertions.assertEquals(storage.getAllSorted(), Arrays.asList(expectedStorage));
         List<Resume> expectedList = new ArrayList<>();
         expectedList.add(R1);
         expectedList.add(R2);
