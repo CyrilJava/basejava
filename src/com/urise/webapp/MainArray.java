@@ -4,9 +4,9 @@ import static com.urise.webapp.ResumeTestData.createTestResume;
 
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
-import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -19,16 +19,17 @@ public class MainArray {
     //private static final Storage ARRAY_STORAGE = new ListStorage();
     //private static final Storage ARRAY_STORAGE = new MapResumeStorage();
     //private static final Storage ARRAY_STORAGE = new MapUuidStorage();
-    private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //private static final Storage ARRAY_STORAGE = new ArrayStorage();
     //private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
-    //private static final Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\basejava\\mainstorage"));
-    //private static final Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\basejava\\mainstorage");
+    //private static final Storage ARRAY_STORAGE = new FileStorage(new File("D:\\Study\\Java2025\\mainstorage"));
+    private static final Storage ARRAY_STORAGE = new PathStorage("D:\\Study\\Java2025\\mainstorage");
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
-            System.out.print("Введите одну из команд - (list | size | save uuid | delete uuid | get uuid | clear | exit): ");
+            System.out.print("Введите одну из команд - " +
+                    "(list | size | save uuid | delete uuid | get uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length > 2) {
                 System.out.println("Неверная команда.");
@@ -91,7 +92,8 @@ public class MainArray {
             System.out.println("Empty");
         } else {
             for (Resume r : all) {
-                System.out.printf("%5s %-20s %30s\n", r.getUuid(), r.getFullName(), r.getContacts().get(ContactType.EMAIL));
+                System.out.printf("%5s %-20s %30s\n",
+                        r.getUuid(), r.getFullName(), r.getContacts().get(ContactType.EMAIL));
             }
         }
         System.out.println("----------------------------");
