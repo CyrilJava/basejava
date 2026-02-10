@@ -23,13 +23,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return resumeCount;
     }
 
-    public List<Resume> getAll() {
-        return Arrays.asList(Arrays.copyOf(storage, resumeCount));
-    }
+    public List<Resume> getAll() { return Arrays.asList(Arrays.copyOf(storage, resumeCount)); }
 
-    protected boolean isExisting(Integer index) {
-        return index >= 0;
-    }
+    protected boolean isExisting(Integer index) { return index >= 0; }
 
     @Override
     protected void doSave(Integer index, Resume resume) {
@@ -52,12 +48,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected void doDelete(Integer index) {
-        reduceArray(index);
+        deleteResume(index);
         storage[resumeCount - 1] = null;
         resumeCount--;
     }
 
     protected abstract void insertResume(int index, Resume resume);
 
-    protected abstract void reduceArray(Integer index);
+    protected abstract void deleteResume(Integer index);
 }

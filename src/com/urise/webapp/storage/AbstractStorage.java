@@ -3,12 +3,11 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class AbstractStorage<SK> implements com.urise.webapp.storage.Storage {
+public abstract class AbstractStorage<SK> implements Storage {
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     public final void save(Resume resume) {
@@ -17,24 +16,21 @@ public abstract class AbstractStorage<SK> implements com.urise.webapp.storage.St
     }
 
     public Resume get(String uuid) {
-        //LOG.info("Get " + uuid);
         SK searchKey = getExistingSearchKey(uuid);
         return doGet(searchKey);
     }
 
     public void update(Resume resume) {
-        //LOG.info("Update " + resume);
         SK searchKey = getExistingSearchKey(resume.getUuid());
         doUpdate(searchKey, resume);
     }
 
     public void delete(String uuid) {
-        //LOG.info("Delete " + uuid);
         SK searchKey = getExistingSearchKey(uuid);
         doDelete(searchKey);
     }
 
-    private SK getNotExistingSearchKey(String uuid) { //для save
+    private SK getNotExistingSearchKey(String uuid) { // для save
         SK searchKey = getSearchKey(uuid);
         if (isExisting(searchKey)) {
             throw new ExistStorageException(uuid);
@@ -50,9 +46,6 @@ public abstract class AbstractStorage<SK> implements com.urise.webapp.storage.St
         }
         return searchKey;
     }
-
-//    public abstract int size();
-//    public abstract void clear();s
 
     public List<Resume> getAllSorted() {
         List<Resume> resumes = getAll();
@@ -73,5 +66,4 @@ public abstract class AbstractStorage<SK> implements com.urise.webapp.storage.St
     protected abstract void doUpdate(SK searchKey, Resume resume);
 
     protected abstract void doDelete(SK searchKey);
-
 }

@@ -2,7 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -14,11 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class PathStorage extends AbstractStorage<Path> { //Context
+public class PathStorage extends AbstractStorage<Path> { // Context
     private final Path directory;
     SerializeStrategy serializeStrategy;
 
-    protected PathStorage(String dir) {//ok
+    public PathStorage(String dir) { // ok
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -27,7 +26,7 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         this.serializeStrategy = new Strategy();
     }
 
-    @Override //+
+    @Override
     public int size() {
         try {
             return (int) Files.list(directory).count();
@@ -36,7 +35,7 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         }
     }
 
-    @Override //+
+    @Override
     protected List<Resume> getAll() {
         List<Resume> resumeList = new ArrayList<>(this.size());
         try (Stream<Path> paths = Files.list(directory)) {
@@ -47,7 +46,7 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         return resumeList;
     }
 
-    @Override //ok
+    @Override
     public void clear() {
         try {
             Files.list(directory).forEach(this::doDelete);
@@ -56,17 +55,15 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         }
     }
 
-    @Override //+
-    protected Path getSearchKey(String uuid) {
-        return directory.resolve(uuid); //возвращаем полный путь
-    }
+    @Override // возвращаем полный путь
+    protected Path getSearchKey(String uuid) { return directory.resolve(uuid); }
 
-    @Override //+
+    @Override
     protected boolean isExisting(Path path) {
         return path.toFile().exists();
     }
 
-    @Override //+
+    @Override
     protected void doSave(Path path, Resume resume) {
         try {
             Files.createFile(path);
@@ -76,7 +73,7 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         }
     }
 
-    @Override //+
+    @Override
     protected Resume doGet(Path path) {
         try {
             return serializeStrategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
@@ -85,7 +82,7 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         }
     }
 
-    @Override //+
+    @Override
     protected void doUpdate(Path path, Resume resume) {
         try {
             serializeStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
@@ -94,12 +91,13 @@ public class PathStorage extends AbstractStorage<Path> { //Context
         }
     }
 
-    @Override //+
+    @Override
     protected void doDelete(Path path) {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File can not be deleted", path.toString(), new IOException("File exists but cannot be deleted"));
+            throw new StorageException("File can not be deleted", path.toString(),
+                    new IOException("File exists but cannot be deleted"));
         }
     }
 }
