@@ -76,19 +76,6 @@ public class Company implements Serializable {
             this.endDate = endDate;
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CompanyPeriod that = (CompanyPeriod) o;
-            return Objects.equals(title, that.title) && Objects.equals(description, that.description) &&
-                    Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(title, description, startDate, endDate);
-        }
 
         @Override
         public String toString() {

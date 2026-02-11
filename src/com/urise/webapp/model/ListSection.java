@@ -2,6 +2,7 @@ package com.urise.webapp.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ListSection extends AbstractSection {
     private static final long serialVersionUID = 4270071768600374419L;
@@ -11,7 +12,7 @@ public class ListSection extends AbstractSection {
         this.textList = textList;
     }
 
-    public ListSection(String... listSectionItems) { //набираем из строк
+    public ListSection(String... listSectionItems) { // набираем из строк
         this.textList = Arrays.asList(listSectionItems);
     }
 
@@ -20,4 +21,15 @@ public class ListSection extends AbstractSection {
         return "* " + String.join("\n* ", textList);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ListSection that = (ListSection) o;
+        return Objects.equals(textList, that.textList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(textList);
+    }
 }
