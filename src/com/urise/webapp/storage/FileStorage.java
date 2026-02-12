@@ -2,6 +2,8 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.strategy.SerializeStrategy;
+import com.urise.webapp.strategy.Strategy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,7 +16,6 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> { // Context
     private final File directory;
-
     SerializeStrategy serializeStrategy;
 
     public FileStorage(File directory) {
@@ -31,21 +32,16 @@ public class FileStorage extends AbstractStorage<File> { // Context
 
     @Override
     public int size() {
-        int i = 0;
-        for (File file : getListFiles())
-            // if (!file.isDirectory()) {
-            i++;
-        // }
-        return i; // сколько файлов
+        return getListFiles().length;
     }
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> result = new ArrayList<>();
+        List<Resume> resumes = new ArrayList<>();
         for (File file : getListFiles()) {
-            result.add(doGet(file));
+            resumes.add(doGet(file));
         }
-        return result; // читает резюме из всех файлов каталога
+        return resumes;
     }
 
     @Override
@@ -71,7 +67,7 @@ public class FileStorage extends AbstractStorage<File> { // Context
             searchKey.createNewFile();
             serializeStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
-            throw new StorageException("I/O error", searchKey.getName(), e);
+            throw new StorageException("I/O error - cannot create file", searchKey.getName(), e);
         }
     }
 
@@ -80,7 +76,7 @@ public class FileStorage extends AbstractStorage<File> { // Context
         try {
             return serializeStrategy.doRead(new BufferedInputStream(new FileInputStream(searchKey)));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Cannot read file", e);
         }
     }
 
@@ -89,7 +85,7 @@ public class FileStorage extends AbstractStorage<File> { // Context
         try {
             serializeStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
-            throw new StorageException("I/O error", searchKey.getName(), e);
+            throw new StorageException("I/O error - cannot update file", searchKey.getName(), e);
         }
     }
 

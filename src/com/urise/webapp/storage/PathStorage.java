@@ -2,6 +2,8 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.strategy.SerializeStrategy;
+import com.urise.webapp.strategy.Strategy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -11,13 +13,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> { // Context
     private final Path directory;
     SerializeStrategy serializeStrategy;
 
-    public PathStorage(String dir) { // ok
+    public PathStorage(String dir) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -28,8 +31,8 @@ public class PathStorage extends AbstractStorage<Path> { // Context
 
     @Override
     public int size() {
-        try {
-            return (int) Files.list(directory).count();
+        try (Stream<Path> files = Files.list(directory)) { // try-with-resources
+            return (int) files.count();
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }
@@ -37,19 +40,17 @@ public class PathStorage extends AbstractStorage<Path> { // Context
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> resumeList = new ArrayList<>(this.size());
         try (Stream<Path> paths = Files.list(directory)) {
-            paths.forEach(path -> resumeList.add(doGet(path)));
+            return paths.map(this::doGet).collect(Collectors.toCollection(() -> new ArrayList<>(this.size())));
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }
-        return resumeList;
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
+        try (Stream<Path> files = Files.list(directory)) {
+            files.forEach(this::doDelete);
         } catch (IOException e) {
             throw new StorageException("File delete error", null);
         }
