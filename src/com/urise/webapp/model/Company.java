@@ -78,8 +78,8 @@ public class Company implements Serializable {
 
         @Override
         public String toString() {
-            return String.format("%tm.%tY - %tm.%tY %-40s %-30s", startDate, startDate, endDate, endDate,
-                    title, description);
+            return String.format("%tm.%tY - %tm.%tY %-40s %-30s",
+                    startDate, startDate, endDate, endDate, title, description);
         }
 
         @Override

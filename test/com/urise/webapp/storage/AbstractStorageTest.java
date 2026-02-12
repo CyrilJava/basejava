@@ -4,10 +4,8 @@ import com.urise.webapp.NamesGenerator;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,9 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractStorageTest {
     protected final com.urise.webapp.storage.Storage storage;
-    protected static final File STORAGE_DIR = new File("D:\\Study\\Java2025\\basejava\\storage");
+    protected static final File STORAGE_DIR = new File(".\\storage");
     private static final String UUID_1 = "uuid1";
-    // private static final Resume R1 = new Resume(UUID_1, NamesGenerator.getName(1));
     private static final Resume R1 = createTestResume(UUID_1, NamesGenerator.getName(1));
     private static final String UUID_2 = "uuid2";
     private static final Resume R2 = createTestResume(UUID_2, NamesGenerator.getName(2));
@@ -34,11 +31,11 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertSize(int size) {
-        Assertions.assertEquals(size, storage.size());
+        assertEquals(size, storage.size());
     }
 
     private void assertGet(Resume resume) {
-        Assertions.assertEquals(resume, storage.get(resume.getUuid()));
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 
     @BeforeEach
@@ -82,7 +79,7 @@ public abstract class AbstractStorageTest {
         expectedList.add(R2);
         expectedList.add(R3);
         expectedList.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
-        Assertions.assertEquals(storage.getAllSorted(), expectedList);
+        assertEquals(storage.getAllSorted(), expectedList);
     }
 
     @Test
@@ -139,5 +136,4 @@ public abstract class AbstractStorageTest {
             storage.get("dummy");
         });
     }
-
 }
