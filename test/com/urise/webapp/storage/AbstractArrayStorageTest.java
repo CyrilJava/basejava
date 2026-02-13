@@ -13,7 +13,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         super(storage);
     }
 
-    @Test//(expected = StorageException.class)
+    @Test
     public void arrayOverflow() {
         assertThrows(StorageException.class, () -> {
             storage.clear();
@@ -24,9 +24,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
             } catch (StorageException e) {
                 fail("Overflow before 10000");
             }
-            storage.save(new Resume("aaa")); //overflow
+            storage.save(new Resume("overflow"));
         });
     }
-
-
 }
