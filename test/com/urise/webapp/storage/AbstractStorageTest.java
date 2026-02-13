@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.urise.webapp.ResumeTestData.createTestResume;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
@@ -51,9 +52,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume r3U = createTestResume(UUID_3, NamesGenerator.getName(3));
-        storage.update(r3U);
-        assertGet(r3U);
+        Resume updatedR3 = createTestResume(UUID_3, NamesGenerator.getName(3));
+        storage.update(updatedR3);
+        assertGet(updatedR3);
     }
 
     @Test
