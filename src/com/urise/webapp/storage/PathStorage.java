@@ -70,7 +70,7 @@ public class PathStorage extends AbstractStorage<Path> { // Context
             Files.createFile(path);
             serializeStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Couldn't create file " + path, path.toString(), e);
+            throw new StorageException("Couldn't create file " + path, path.getFileName().toString(), e);
         }
     }
 
@@ -79,7 +79,7 @@ public class PathStorage extends AbstractStorage<Path> { // Context
         try {
             return serializeStrategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Path read error", path.toString(), e);
+            throw new StorageException("Path read error", path.getFileName().toString(), e);
         }
     }
 
@@ -97,7 +97,7 @@ public class PathStorage extends AbstractStorage<Path> { // Context
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File can not be deleted", path.toString(),
+            throw new StorageException("File can not be deleted", path.getFileName().toString(),
                     new IOException("File exists but cannot be deleted"));
         }
     }

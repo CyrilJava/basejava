@@ -44,8 +44,8 @@ public class MainFile {
         System.out.println();
         System.out.println("--- 6. Tree - рекурсивный обход и вывод имени файлов в каталогах и подкаталогах---");
         // String treePath = "../basejava/src";
-        // String treePath = "../basejava/src/com/urise/webapp";
-        String treePath = "D:\\Test";
+        String treePath = "../basejava/src/com/urise/webapp";
+        // String treePath = "D:\\Test";
         listDirectory(treePath, 0);
         // listDirOnly(treePath, 0);
     }
