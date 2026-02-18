@@ -5,8 +5,10 @@ import static com.urise.webapp.ResumeTestData.createTestResume;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.*;
+import com.urise.webapp.storage.strategy.Strategy;
+import com.urise.webapp.storage.strategy.XmlStreamSerializer;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -16,13 +18,15 @@ import java.util.List;
  * (just run, no need to understand)
  */
 public class MainArray {
+    private static final String dir = ".\\mainstorage";
     //private static final Storage ARRAY_STORAGE = new ListStorage();
     //private static final Storage ARRAY_STORAGE = new MapResumeStorage();
     //private static final Storage ARRAY_STORAGE = new MapUuidStorage();
     //private static final Storage ARRAY_STORAGE = new ArrayStorage();
     //private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
     //private static final Storage ARRAY_STORAGE = new FileStorage(new File(".\\mainstorage"));
-    private static final Storage ARRAY_STORAGE = new PathStorage(".\\mainstorage");
+    //private static final Storage ARRAY_STORAGE = new PathStorage(dir, new Strategy());
+    private static final Storage ARRAY_STORAGE = new PathStorage(dir, new XmlStreamSerializer());
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

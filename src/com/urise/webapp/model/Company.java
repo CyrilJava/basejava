@@ -1,17 +1,24 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 public class Company implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4270071768600374419L;
     protected String name;
     protected String webSite;
     protected List<CompanyPeriod> periodList;
+
+    public Company() {
+    }
 
     // конструктор с передачей множества периодов
     public Company(String name, String webSite, CompanyPeriod... companyPeriods) {
@@ -60,13 +67,17 @@ public class Company implements Serializable {
                 periodList.stream().map(Object::toString).collect(Collectors.joining("\n     ")));
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class CompanyPeriod implements Serializable {
+        @Serial
         private static final long serialVersionUID = 4270071768600374419L;
-        private final String title;
-        private final String description;
-        private final LocalDate startDate;
-        private final LocalDate endDate;
+        private String title;
+        private String description;
+        private LocalDate startDate;
+        private LocalDate endDate;
 
+        public CompanyPeriod() {
+        }
         public CompanyPeriod(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(startDate, "startDate must not be null");

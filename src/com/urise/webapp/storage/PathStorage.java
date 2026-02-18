@@ -3,7 +3,6 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.strategy.SerializeStrategy;
-import com.urise.webapp.storage.strategy.Strategy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -18,15 +17,15 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> { // Context
     private final Path directory;
-    SerializeStrategy serializeStrategy;
+    private final SerializeStrategy serializeStrategy;
 
-    public PathStorage(String dir) {
+    public PathStorage(String dir, SerializeStrategy serializeStrategy) {
+        Objects.requireNonNull(dir, "directory must not be null");
+        this.serializeStrategy = serializeStrategy;
         directory = Paths.get(dir);
-        Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-        this.serializeStrategy = new Strategy();
     }
 
     @Override
