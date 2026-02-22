@@ -3,7 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.strategy.SerializeStrategy;
-import com.urise.webapp.storage.strategy.Strategy;
+import com.urise.webapp.storage.strategy.ObjectStreamSerializer;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -27,7 +27,7 @@ public class FileStorage extends AbstractStorage<File> { // Context
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
-        this.serializeStrategy = new Strategy();
+        this.serializeStrategy = new ObjectStreamSerializer();
     }
 
     @Override

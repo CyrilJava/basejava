@@ -19,7 +19,7 @@ public class Company implements Serializable {
     private static final long serialVersionUID = 4270071768600374419L;
     protected String name;
     protected String webSite;
-    protected List<CompanyPeriod> periodList;
+    protected List<CompanyPeriod> periods;
 
     public Company() {
     }
@@ -29,13 +29,13 @@ public class Company implements Serializable {
         new Company(name, webSite, Arrays.asList(companyPeriods));
     }
 
-    public Company(String name, String webSite, List<CompanyPeriod> periodList) {
+    public Company(String name, String webSite, List<CompanyPeriod> periods) {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(webSite, "webSite must not be null");
-        Objects.requireNonNull(periodList, "periodList must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
         this.name = name;
         this.webSite = webSite;
-        this.periodList = periodList;
+        this.periods = periods;
     }
 
     public String getName() {
@@ -46,8 +46,8 @@ public class Company implements Serializable {
         return webSite;
     }
 
-    public List<CompanyPeriod> getPeriodList() {
-        return periodList;
+    public List<CompanyPeriod> getPeriods() {
+        return periods;
     }
 
     @Override
@@ -56,18 +56,18 @@ public class Company implements Serializable {
         Company company = (Company) o;
         return Objects.equals(name, company.name) &&
                 Objects.equals(webSite, company.webSite) &&
-                Objects.equals(periodList, company.periodList);
+                Objects.equals(periods, company.periods);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, webSite, periodList);
+        return Objects.hash(name, webSite, periods);
     }
 
     @Override
     public String toString() {
         return String.format("%-30s %-40s\n     %-40s\n", name, webSite,
-                periodList.stream().map(Object::toString).collect(Collectors.joining("\n     ")));
+                periods.stream().map(Object::toString).collect(Collectors.joining("\n     ")));
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -83,6 +83,7 @@ public class Company implements Serializable {
 
         public CompanyPeriod() {
         }
+        
         public CompanyPeriod(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(startDate, "startDate must not be null");
