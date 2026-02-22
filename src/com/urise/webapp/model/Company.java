@@ -7,9 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 
+import com.urise.webapp.util.LocalDateAdapter;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
     @Serial
     private static final long serialVersionUID = 4270071768600374419L;
@@ -48,8 +52,7 @@ public class Company implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Company)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
         return Objects.equals(name, company.name) &&
                 Objects.equals(webSite, company.webSite) &&
@@ -73,7 +76,9 @@ public class Company implements Serializable {
         private static final long serialVersionUID = 4270071768600374419L;
         private String title;
         private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
 
         public CompanyPeriod() {

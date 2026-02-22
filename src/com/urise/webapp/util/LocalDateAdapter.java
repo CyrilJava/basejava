@@ -1,7 +1,7 @@
 package com.urise.webapp.util;
 
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
     @Override

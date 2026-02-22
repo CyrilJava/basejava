@@ -1,18 +1,15 @@
 package com.urise.webapp;
 
-import static com.urise.webapp.ResumeTestData.createTestResume;
-
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.*;
-import com.urise.webapp.storage.strategy.Strategy;
+import com.urise.webapp.storage.PathStorage;
+import com.urise.webapp.storage.Storage;
 import com.urise.webapp.storage.strategy.XmlStreamSerializer;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-
+import static com.urise.webapp.ResumeTestData.createTestResume;
 /**
  * Interactive test for ArrayStorage implementation.
  * (just run, no need to understand)
