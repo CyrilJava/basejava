@@ -3,6 +3,7 @@ package com.urise.webapp;
 import com.urise.webapp.model.*;
 import com.urise.webapp.util.DateUtil;
 import com.urise.webapp.util.TransliterateUtil;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class ResumeTestData {
                 2013, 3, 2013, 5));
         r.addSection(SectionType.EDUCATION, new CompanySection(educations));
 
-        educations.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<Company.CompanyPeriod>(){{
+        educations.add(new Company("ИТМО", "http://www.ifmo.ru/", new ArrayList<Company.CompanyPeriod>() {{
             add(new Company.CompanyPeriod("Преподаватель", "", DateUtil.of(1996, 9), DateUtil.of(1997, 6)));
             add(new Company.CompanyPeriod("Аспирантура (программист С, С++)", "", DateUtil.of(1993, 9), DateUtil.of(1996, 7)));
             add(new Company.CompanyPeriod("Инженер (программист Fortran, C)", "", DateUtil.of(1987, 9), DateUtil.of(1993, 7)));
@@ -94,43 +95,46 @@ public class ResumeTestData {
 
     public static Resume createTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+        boolean sections = true;
 
         resume.addContact(ContactType.PHONE, "+7(123)456-7890");
         resume.addContact(ContactType.EMAIL, TransliterateUtil.makeEmail(fullName) + "@basejava.ru");
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + TransliterateUtil.makeEmail(fullName));
         resume.addContact(ContactType.WEBSITE, "http://" + TransliterateUtil.makeEmail(fullName) + ".basejava.ru/");
         resume.addContact(ContactType.GITHUB, "https://github.com/" + TransliterateUtil.makeEmail(fullName));
+        if (sections) {
+            resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
+            resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
-        resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));
+            resume.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<String>() {{
+                add("Достижение 1 соискателя " + uuid);
+                add("Достижение 2 соискателя " + uuid);
+                add("Достижение 3 соискателя " + uuid);
+            }}));
+            resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<String>() {{
+                add("Квалификация 1 соискателя " + uuid);
+                add("Квалификация 2 соискателя " + uuid);
+                add("Квалификация 3 соискателя " + uuid);
+            }}));
 
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<String>() {{
-            add("Достижение 1 соискателя " + uuid);
-            add("Достижение 2 соискателя " + uuid);
-            add("Достижение 3 соискателя " + uuid);
-        }}));
-        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<String>() {{
-            add("Квалификация 1 соискателя " + uuid);
-            add("Квалификация 2 соискателя " + uuid);
-            add("Квалификация 3 соискателя " + uuid);
-        }}));
+            List<Company> companyList = new ArrayList<>();
+            companyList.add(createCompany("Фирма 3", "https://www.company3.com/", "Разработчик", "Разработка java",
+                    2023, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+            companyList.add(createCompany("Фирма 2", "https://www.company2.com/", "Тестировщик", "Разработка автотестов",
+                    2021, 8, 2023, 9));
+            companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
+                    2020, 7, 2021, 7));
+            CompanySection experience = new CompanySection(companyList);
+            resume.addSection(SectionType.EXPERIENCE, experience);
 
-        List<Company> companyList = new ArrayList<>();
-        companyList.add(createCompany("Фирма 2", "https://www.company2.com/", "Разработчик", "Разработка java",
-                2021, 8, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
-        companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
-                2020, 7, 2021, 7));
-        CompanySection experience = new CompanySection(companyList);
-        resume.addSection(SectionType.EXPERIENCE, experience);
-
-        List<Company> eduList = new ArrayList<>();
-        eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",
-                2019, 8, 2020, 5));
-        eduList.add(createCompany("МИИИТ", "http://www.mosinstenginftech.ru", "Вычислительные машины, комплексы, системы и сети", "",
-                2013, 9, 2019, 6));
-        CompanySection education = new CompanySection(eduList);
-        resume.addSection(SectionType.EDUCATION, education);
-
+            List<Company> eduList = new ArrayList<>();
+            eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",
+                    2019, 8, 2020, 5));
+            eduList.add(createCompany("МИИИТ", "http://www.mosinstenginftech.ru", "Вычислительные машины, комплексы, системы и сети", "",
+                    2013, 9, 2019, 6));
+            CompanySection education = new CompanySection(eduList);
+            resume.addSection(SectionType.EDUCATION, education);
+        }
         return resume;
     }
 }

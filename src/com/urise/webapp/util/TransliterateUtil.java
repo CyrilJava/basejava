@@ -105,6 +105,9 @@ public class TransliterateUtil {
                 case 'я':
                     result.append("ya");
                     break;
+                default:
+                    result.append(c);
+                    break;
             }
         }
         return result.toString();

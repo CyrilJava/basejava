@@ -4,8 +4,9 @@ import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.PathStorage;
 import com.urise.webapp.storage.Storage;
-import com.urise.webapp.storage.strategy.JsonStreamSerializer;
-import com.urise.webapp.storage.strategy.XmlStreamSerializer;
+import com.urise.webapp.storage.serializer.DataStreamSerializer;
+import com.urise.webapp.storage.serializer.JsonStreamSerializer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,15 +18,16 @@ import static com.urise.webapp.ResumeTestData.createTestResume;
  */
 public class MainArray {
     private static final String dir = ".\\mainstorage";
-    //private static final Storage ARRAY_STORAGE = new ListStorage();
-    //private static final Storage ARRAY_STORAGE = new MapResumeStorage();
-    //private static final Storage ARRAY_STORAGE = new MapUuidStorage();
-    //private static final Storage ARRAY_STORAGE = new ArrayStorage();
-    //private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
-    //private static final Storage ARRAY_STORAGE = new FileStorage(new File(".\\mainstorage"));
-    //private static final Storage ARRAY_STORAGE = new PathStorage(dir, new Strategy());
-    //private static final Storage ARRAY_STORAGE = new PathStorage(dir, new XmlStreamSerializer());
+    // private static final Storage ARRAY_STORAGE = new ListStorage();
+    // private static final Storage ARRAY_STORAGE = new MapResumeStorage();
+    // private static final Storage ARRAY_STORAGE = new MapUuidStorage();
+    // private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    // private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    // private static final Storage ARRAY_STORAGE = new FileStorage(new File(".\\mainstorage"));
+    // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new Strategy());
+    // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new XmlStreamSerializer());
     private static final Storage ARRAY_STORAGE = new PathStorage(dir, new JsonStreamSerializer());
+    // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new DataStreamSerializer());
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

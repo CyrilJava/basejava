@@ -1,4 +1,4 @@
-package com.urise.webapp.storage.strategy;
+package com.urise.webapp.storage.serializer;
 
 import com.urise.webapp.model.Company;
 import com.urise.webapp.model.CompanySection;

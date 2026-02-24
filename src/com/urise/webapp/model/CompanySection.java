@@ -2,13 +2,14 @@ package com.urise.webapp.model;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-
+import java.io.Serial;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CompanySection extends AbstractSection {
+    @Serial
     private static final long serialVersionUID = 4270071768600374419L;
     protected List<Company> companies;
 
@@ -17,6 +18,10 @@ public class CompanySection extends AbstractSection {
 
     public CompanySection(List<Company> companies) {
         this.companies = companies;
+    }
+
+    public List<Company> getCompanies() {
+        return companies;
     }
 
     @Override

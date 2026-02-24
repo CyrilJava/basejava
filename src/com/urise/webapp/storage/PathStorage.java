@@ -2,7 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.strategy.SerializeStrategy;
+import com.urise.webapp.storage.serializer.SerializeStrategy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -40,7 +40,8 @@ public class PathStorage extends AbstractStorage<Path> { // Context
     @Override
     protected List<Resume> getAll() {
         try (Stream<Path> paths = Files.list(directory)) {
-            return paths.map(this::doGet).collect(Collectors.toCollection(() -> new ArrayList<>(this.size())));
+            return paths.map(this::doGet)
+                    .collect(Collectors.toCollection(() -> new ArrayList<>(this.size())));
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }

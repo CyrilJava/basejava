@@ -2,7 +2,6 @@ package com.urise.webapp.model;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-
 import java.io.Serial;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +22,10 @@ public class ListSection extends AbstractSection {
 
     public ListSection(String... listSectionItems) { // набираем из строк
         this.textList = Arrays.asList(listSectionItems);
+    }
+
+    public List<String> getTextList() {
+        return textList;
     }
 
     @Override

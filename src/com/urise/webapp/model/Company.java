@@ -1,5 +1,9 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -7,11 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import com.urise.webapp.util.LocalDateAdapter;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
@@ -50,6 +49,18 @@ public class Company implements Serializable {
         return periods;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
+    }
+
+    public void setPeriods(List<CompanyPeriod> periods) {
+        this.periods = periods;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -83,7 +94,7 @@ public class Company implements Serializable {
 
         public CompanyPeriod() {
         }
-        
+
         public CompanyPeriod(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(startDate, "startDate must not be null");
@@ -91,6 +102,22 @@ public class Company implements Serializable {
             this.description = description;
             this.startDate = startDate;
             this.endDate = endDate;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
         }
 
         @Override
