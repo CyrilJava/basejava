@@ -95,13 +95,16 @@ public class ResumeTestData {
 
     public static Resume createTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        boolean sections = true;
+        boolean contacts = false;
+        boolean sections = false;
 
-        resume.addContact(ContactType.PHONE, "+7(123)456-7890");
-        resume.addContact(ContactType.EMAIL, TransliterateUtil.makeEmail(fullName) + "@basejava.ru");
-        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + TransliterateUtil.makeEmail(fullName));
-        resume.addContact(ContactType.WEBSITE, "http://" + TransliterateUtil.makeEmail(fullName) + ".basejava.ru/");
-        resume.addContact(ContactType.GITHUB, "https://github.com/" + TransliterateUtil.makeEmail(fullName));
+        if (contacts) {
+            resume.addContact(ContactType.PHONE, "+7(123)456-7890");
+            resume.addContact(ContactType.EMAIL, TransliterateUtil.makeEmail(fullName) + "@basejava.ru");
+            resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/" + TransliterateUtil.makeEmail(fullName));
+            resume.addContact(ContactType.WEBSITE, "http://" + TransliterateUtil.makeEmail(fullName) + ".basejava.ru/");
+            resume.addContact(ContactType.GITHUB, "https://github.com/" + TransliterateUtil.makeEmail(fullName));
+        }
         if (sections) {
             resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
             resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));

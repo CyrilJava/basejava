@@ -4,6 +4,7 @@ import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
+
 import java.sql.*;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class SqlStorage implements Storage {
     // insert/update/delete
     protected void execute(String sql, SqlExecutor<Void> executor) {
         try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             executor.accept(ps);
             ps.execute();
         } catch (SQLException e) {
@@ -28,7 +29,7 @@ public class SqlStorage implements Storage {
     // select
     protected <T> T executeQuery(String sql, SqlQueryExecutor<T> executor) {
         try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = executor.execute(ps);
             return executor.map(rs);
         } catch (SQLException e) {
@@ -117,7 +118,14 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return 0;
+        try (Connection conn = connectionFactory.getConnection();
+                PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM resume r\n")) {
+            ResultSet rs = ps.executeQuery();
+            //if (!rs.next()) throw new NotExistStorageException(uuid);
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
