@@ -2,7 +2,10 @@ package com.urise.webapp;
 
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.storage.Storage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
@@ -10,7 +13,7 @@ public class Config {
     // "D:\\Study\\Java2025\\basejava\\config\\resumes.properties"
     private static final Config INSTANCE = new Config();
     private Properties properties = new Properties();
-    private File storageDir;
+    private final File storageDir;
     private final Storage storage;
 
     public static Config get() {

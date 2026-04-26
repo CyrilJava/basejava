@@ -1,11 +1,16 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.ConnectionFactory;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
@@ -16,13 +21,13 @@ public class SqlStorage implements Storage {
     }
 
     // insert/update/delete
-    protected void execute(String sql, SqlExecutor<Void> executor) {
+    protected int execute(String sql, SqlExecutor<Void> executor) {
         try (Connection conn = connectionFactory.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             executor.accept(ps);
-            ps.execute();
+            return ps.executeUpdate();
         } catch (SQLException e) {
-            throw new StorageException(e);
+            throw new ExistStorageException(null); // работает для save
         }
     }
 
@@ -51,32 +56,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    /*@Override
-    public void save(Resume r) {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement("INSERT INTO resume VALUES (?,?)")) {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
-            ps.execute();
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r\n where r.uuid = ?")) {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) throw new NotExistStorageException(uuid);
-            return new Resume(uuid, rs.getString("full_name"));
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }*/
-    // Упрощенные методы
-    @Override
+    @Override // работает
     public void save(Resume r) {
         execute("INSERT INTO resume VALUES (?,?)", ps -> {
             ps.setString(1, r.getUuid());
@@ -84,9 +64,9 @@ public class SqlStorage implements Storage {
         });
     }
 
-    @Override
+    @Override // работает
     public Resume get(String uuid) {
-        return executeQuery("SELECT * FROM resume r WHERE r.uuid = ?", new SqlQueryExecutor<Resume>() {
+        return executeQuery("SELECT * FROM resume WHERE uuid = ?", new SqlQueryExecutor<>() {
             @Override
             public ResultSet execute(PreparedStatement ps) throws SQLException {
                 ps.setString(1, uuid);
@@ -101,45 +81,64 @@ public class SqlStorage implements Storage {
         });
     }
 
-    @Override
+    @Override // работает
     public void update(Resume r) {
-        execute("UPDATE resume r\n  SET r.full_name =? where r.uuid=?", ps -> {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
+        int sqlResult = execute("UPDATE resume \n SET full_name = ? where uuid = ?", ps -> {
+            ps.setString(1, r.getFullName());
+            ps.setString(2, r.getUuid());
         });
+        if (sqlResult == 0) {
+            throw new NotExistStorageException(null);
+        }
     }
 
-    @Override
+    @Override // работает
     public void delete(String uuid) {
-        execute("DELETE FROM resume r\n where r.uuid=?", ps -> {
-            ps.setString(1, uuid);
+        int sqlResult = execute("DELETE FROM resume \n where uuid = ?",
+                ps -> ps.setString(1, uuid));
+        if (sqlResult == 0) {
+            throw new NotExistStorageException(null);
+        }
+    }
+
+    @Override // работает
+    public int size() {
+        return executeQuery("SELECT count(*) FROM resume\n", new SqlQueryExecutor<>() {
+            @Override
+            public ResultSet execute(PreparedStatement ps) throws SQLException {
+                return ps.executeQuery();
+            }
+
+            @Override
+            public Integer map(ResultSet rs) throws SQLException {
+                if (!rs.next()) throw new NotExistStorageException(null);
+                return rs.getInt(1);
+            }
         });
     }
 
-    @Override
-    public int size() {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM resume r\n")) {
-            ResultSet rs = ps.executeQuery();
-            //if (!rs.next()) throw new NotExistStorageException(uuid);
-            return rs.getInt(1);
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }
-
-    @Override
+    @Override // работает
     public List<Resume> getAllSorted() {
-        return List.of();
+        return executeQuery("SELECT * FROM resume \n order by full_name asc", new SqlQueryExecutor<>() {
+            @Override
+            public ResultSet execute(PreparedStatement ps) throws SQLException {
+                return ps.executeQuery();
+            }
+
+            @Override
+            public List<Resume> map(ResultSet rs) throws SQLException {
+                List<com.urise.webapp.model.Resume> result = new ArrayList<>();
+                while (rs.next()) {
+                    result.add(new com.urise.webapp.model.Resume(rs.getString("uuid").trim(),
+                            rs.getString("full_name")));
+                }
+                return result;
+            }
+        });
     }
 
-    @Override
+    @Override // работает
     public void clear() {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement("DELETE FROM resume")) {
-            ps.execute();
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
+        execute("DELETE FROM resume", PreparedStatement::execute);
     }
 }

@@ -2,22 +2,21 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.PathStorage;
+import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.storage.Storage;
-import com.urise.webapp.storage.serializer.DataStreamSerializer;
-import com.urise.webapp.storage.serializer.JsonStreamSerializer;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import static com.urise.webapp.ResumeTestData.createTestResume;
+
 /**
  * Interactive test for ArrayStorage implementation.
  * (just run, no need to understand)
  */
 public class MainArray {
     private static final String dir = ".\\mainstorage";
+
     // private static final Storage ARRAY_STORAGE = new ListStorage();
     // private static final Storage ARRAY_STORAGE = new MapResumeStorage();
     // private static final Storage ARRAY_STORAGE = new MapUuidStorage();
@@ -26,8 +25,9 @@ public class MainArray {
     // private static final Storage ARRAY_STORAGE = new FileStorage(new File(".\\mainstorage"));
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new Strategy());
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new XmlStreamSerializer());
-    private static final Storage ARRAY_STORAGE = new PathStorage(dir, new JsonStreamSerializer());
+    // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new JsonStreamSerializer());
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new DataStreamSerializer());
+    private static final Storage ARRAY_STORAGE = new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "f;c6iw4q1n-,73bz");
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -94,7 +94,7 @@ public class MainArray {
         System.out.println("----------------------------");
         System.out.println(" uuid Name                  ");
         if (all.isEmpty()) {
-            System.out.println("Empty");
+            System.out.println("<  Empty  >");
         } else {
             for (Resume r : all) {
                 System.out.printf("%5s %-20s %30s\n",
