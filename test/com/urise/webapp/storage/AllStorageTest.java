@@ -5,17 +5,17 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-        ArrayStorageTest.class
-        , SortedArrayStorageTest.class
-        , ListStorageTest.class
-        , MapUuidStorageTest.class
-        , MapResumeStorageTest.class
-        , FileStorageTest.class
-        , PathStorageTest.class
-        , XmlPathStorageTest.class
-        , JsonPathStorageTest.class
-        , DataPathStorageTest.class
-        , SqlStorageTest.class
+        ArrayStorageTest.class,
+        SortedArrayStorageTest.class,
+        ListStorageTest.class,
+        MapUuidStorageTest.class,
+        MapResumeStorageTest.class,
+        FileStorageTest.class,
+        PathStorageTest.class,
+        XmlPathStorageTest.class,
+        JsonPathStorageTest.class,
+        DataPathStorageTest.class,
+        SqlStorageTest.class
 })
 public class AllStorageTest {
 }

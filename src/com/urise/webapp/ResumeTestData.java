@@ -95,7 +95,7 @@ public class ResumeTestData {
 
     public static Resume createTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        boolean contacts = false;
+        boolean contacts = true;
         boolean sections = false;
 
         if (contacts) {
