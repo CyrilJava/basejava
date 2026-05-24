@@ -1,48 +1,35 @@
 package com.urise.webapp.sql;
 
-import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    public SqlHelper(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
-    // insert/update/delete
-    public int execute(String sql, SqlExecutor<Void> executor) {
+    public void execute(String sql) {
+        execute(sql, PreparedStatement::execute);
+    }
+
+    public <T> T execute(String sql, SqlExecutor<T> executor) {
         try (Connection conn = connectionFactory.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            executor.execute(ps);
-            return ps.executeUpdate();
+            return executor.execute(ps);
         } catch (SQLException e) {
-            throw new ExistStorageException(null); // работает для save
+            throw ExceptionUtil.convertException(e);
         }
     }
 
-    // select
-    public <T> T executeQuery(String sql, SqlQueryExecutor<T> executor) {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ResultSet rs = executor.execute(ps);
-            return executor.map(rs);
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }
-
-    public <T> T transactionalExecute(String sql, SqlTransaction<T> executor) {
-        try (Connection conn = connectionFactory.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
             try {
                 conn.setAutoCommit(false);
-                T res = executor.execute(ps);
+                T res = executor.execute(conn);
                 conn.commit();
                 return res;
             } catch (SQLException e) {
