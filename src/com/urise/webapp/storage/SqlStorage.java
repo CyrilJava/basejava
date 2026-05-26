@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,32 +120,6 @@ public class SqlStorage implements Storage {
         });
     }
 
-    /* @Override // прибит гвоздями
-    public List<Resume> getAllSorted() {
-        return sqlHelper.execute("" +
-                        "select r.uuid, r.full_name, p.value as PHONE, e.value as EMAIL," +
-                        "       l.value as LINKEDIN, w.value as WEBSITE, g.value as GITHUB \n" +
-                        "  from resume r \n" +
-                        "  left join public.contact p on r.uuid = p.resume_uuid and p.type = 'PHONE' \n" +
-                        "  left join public.contact e on r.uuid = e.resume_uuid and e.type = 'EMAIL' \n" +
-                        "  left join public.contact l on r.uuid = l.resume_uuid and l.type = 'LINKEDIN' \n" +
-                        "  left join public.contact w on r.uuid = w.resume_uuid and w.type = 'WEBSITE' \n" +
-                        "  left join public.contact g on r.uuid = g.resume_uuid and g.type = 'GITHUB'" +
-                        "order by r.full_name asc", ps -> {
-                    ResultSet rs = ps.executeQuery();
-                    List<Resume> result = new ArrayList<>();
-                    while (rs.next()) {
-                        Resume r = new Resume(rs.getString("uuid").trim(), rs.getString("full_name"));
-                        for (ContactType ct : ContactType.values()) {
-                            r.addContact(ct, rs.getString(ct.toString()));
-                        }
-                        result.add(r);
-                    }
-                    return result;
-                }
-        );
-    }*/
-
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.execute("" +
@@ -153,27 +128,22 @@ public class SqlStorage implements Storage {
                         "left join contact c on c.resume_uuid = r.uuid \n" +
                         " order by r.full_name asc", ps -> {
                     ResultSet rs = ps.executeQuery();
-                    // В getAllSorted() лучше использовать Map<String, Resume>,
-                    // чтобы не создавать новый Resume на каждую строку ResultSet.
-                    // При LEFT JOIN одно резюме может вернуться несколькими строками -
-                    // по одной строке на каждый контакт
-                    /* Map<String, Resume> result = new HashMap<>();
+                    Map<String, Resume> resumes = new HashMap<>();
                     while (rs.next()) {
-                        result.put(rs.getString("uuid").trim(),
-                                new Resume(rs.getString("uuid").trim(),
-                                        rs.getString("full_name")));
-                    }
-                    return new ArrayList<>(result.values());*/
-                    Map<String, Resume> result = new HashMap<>();
-                    while (rs.next()) {
-                        String cursor = rs.getString("uuid").trim();
-                        Resume r = new Resume(cursor, rs.getString("full_name"));
-                        if (!rs.getString("value").isEmpty()) {
-                            r.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                        String cursorId = rs.getString("uuid").trim();
+                        Resume r;
+                        if (resumes.get(cursorId) == null) {
+                            r = new Resume(cursorId, rs.getString("full_name"));
+                        } else {
+                            r = resumes.get(cursorId);
                         }
-                        result.put(rs.getString("uuid").trim(), r);
+                        r.addContact(ContactType.valueOf(rs.getString("type")),
+                                rs.getString("value"));
+                        resumes.put(cursorId, r);
                     }
-                    return new ArrayList<>(result.values());
+                    List<Resume> result = new ArrayList<>(resumes.values());
+                    result.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+                    return result;
                 }
         );
     }
