@@ -96,7 +96,10 @@ public class ResumeTestData {
     public static Resume createTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         boolean contacts = true;
-        boolean sections = false;
+        boolean sections = true;
+        boolean textSections = true;
+        boolean listSections = true;
+        boolean compSections = false;
 
         if (contacts) {
             resume.addContact(ContactType.PHONE, "+7(123)456-7890");
@@ -106,37 +109,43 @@ public class ResumeTestData {
             resume.addContact(ContactType.GITHUB, "https://github.com/" + TransliterateUtil.makeEmail(fullName));
         }
         if (sections) {
-            resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
-            resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));
+            if (textSections) {
+                resume.addSection(SectionType.OBJECTIVE, new TextSection("Наименование позиции соискателя " + uuid));
+                resume.addSection(SectionType.PERSONAL, new TextSection("Список личных качеств соискателя " + uuid));
+            }
 
-            resume.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<String>() {{
-                add("Достижение 1 соискателя " + uuid);
-                add("Достижение 2 соискателя " + uuid);
-                add("Достижение 3 соискателя " + uuid);
-            }}));
-            resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<String>() {{
-                add("Квалификация 1 соискателя " + uuid);
-                add("Квалификация 2 соискателя " + uuid);
-                add("Квалификация 3 соискателя " + uuid);
-            }}));
+            if (listSections) {
+                resume.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<String>() {{
+                    add("Достижение 1 соискателя " + uuid);
+                    add("Достижение 2 соискателя " + uuid);
+                    add("Достижение 3 соискателя " + uuid);
+                }}));
+                resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<String>() {{
+                    add("Квалификация 1 соискателя " + uuid);
+                    add("Квалификация 2 соискателя " + uuid);
+                    add("Квалификация 3 соискателя " + uuid);
+                }}));
+            }
 
-            List<Company> companyList = new ArrayList<>();
-            companyList.add(createCompany("Фирма 3", "https://www.company3.com/", "Разработчик", "Разработка java",
-                    2023, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
-            companyList.add(createCompany("Фирма 2", "https://www.company2.com/", "Тестировщик", "Разработка автотестов",
-                    2021, 8, 2023, 9));
-            companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
-                    2020, 7, 2021, 7));
-            CompanySection experience = new CompanySection(companyList);
-            resume.addSection(SectionType.EXPERIENCE, experience);
+            if (compSections) {
+                List<Company> companyList = new ArrayList<>();
+                companyList.add(createCompany("Фирма 3", "https://www.company3.com/", "Разработчик", "Разработка java",
+                        2023, 10, LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+                companyList.add(createCompany("Фирма 2", "https://www.company2.com/", "Тестировщик", "Разработка автотестов",
+                        2021, 8, 2023, 9));
+                companyList.add(createCompany("Фирма 1", "https://www.company1.com/", "Аналитик", "Составление документации",
+                        2020, 7, 2021, 7));
+                CompanySection experience = new CompanySection(companyList);
+                resume.addSection(SectionType.EXPERIENCE, experience);
 
-            List<Company> eduList = new ArrayList<>();
-            eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",
-                    2019, 8, 2020, 5));
-            eduList.add(createCompany("МИИИТ", "http://www.mosinstenginftech.ru", "Вычислительные машины, комплексы, системы и сети", "",
-                    2013, 9, 2019, 6));
-            CompanySection education = new CompanySection(eduList);
-            resume.addSection(SectionType.EDUCATION, education);
+                List<Company> eduList = new ArrayList<>();
+                eduList.add(createCompany("IT Курс", "https://www.it_course.com/", "Java Development", "",
+                        2019, 8, 2020, 5));
+                eduList.add(createCompany("МИИИТ", "http://www.mosinstenginftech.ru", "Вычислительные машины, комплексы, системы и сети", "",
+                        2013, 9, 2019, 6));
+                CompanySection education = new CompanySection(eduList);
+                resume.addSection(SectionType.EDUCATION, education);
+            }
         }
         return resume;
     }
