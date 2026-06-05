@@ -15,14 +15,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try { // это необходимо для работы драйвера postgresql с Tomcat
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -45,10 +52,10 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.execute(
-                "SELECT r.uuid, r.full_name, c.type, c.value as contact_value, " +
-                        "s.section_type, s.value as section_value \n" +
-                        "FROM resume r \n" +
-                        "  JOIN contact c  ON c.resume_uuid = r.uuid \n" +
+                "SELECT r.uuid, r.full_name, c.type, c.value as contact_value" +
+                        ", s.section_type, s.value as section_value \n" +
+                        "  FROM resume r \n" +
+                        "  LEFT JOIN contact c  ON c.resume_uuid = r.uuid \n" +
                         "  LEFT JOIN section s  ON s.resume_uuid = r.uuid \n" +
                         " WHERE r.uuid =? ",
                 ps -> {
@@ -119,11 +126,11 @@ public class SqlStorage implements Storage {
         });
     }
 
-    @Override
-    public List<Resume> getAllSorted() {
+    /* @Override
+    public List<Resume> getAllSorted() { // через join
         return sqlHelper.execute(
-                "SELECT r.uuid, r.full_name, c.type, c.value as contact_value, " +
-                        "s.section_type, s.value as section_value \n" +
+                "SELECT r.uuid, r.full_name, c.type, c.value as contact_value" +
+                        ", s.section_type, s.value as section_value \n" +
                         "     from resume r \n" +
                         "left join contact c on c.resume_uuid = r.uuid \n" +
                         "left join section s on s.resume_uuid = r.uuid \n" +
@@ -141,6 +148,85 @@ public class SqlStorage implements Storage {
                         addSection(rs, r);
                     }
                     return new ArrayList<>(resumes.values());
+                }
+        );
+    }*/
+
+    @Override // все таблицы отдельно
+    public List<Resume> getAllSorted() {
+        Map<String, Resume> resumes = getAllResumes();
+        if (resumes.isEmpty()) {
+            return new ArrayList<>();
+        }
+        getAllContacts(resumes);
+        getAllSections(resumes);
+        return resumes.values().stream().sorted(Comparator.comparing(Resume::getFullName)
+                .thenComparing(Resume::getUuid)).collect(Collectors.toList());
+    }
+
+    // Получение всех резюме
+    private Map<String, Resume> getAllResumes() {
+        return sqlHelper.execute(
+                "SELECT uuid, full_name FROM resume ORDER BY full_name ASC",
+                ps -> {
+                    ResultSet rs = ps.executeQuery();
+                    Map<String, Resume> resumes = new LinkedHashMap<>();
+                    while (rs.next()) {
+                        String uuid = rs.getString("uuid").trim();
+                        String fullName = rs.getString("full_name");
+                        resumes.put(uuid, new Resume(uuid, fullName));
+                    }
+                    return resumes;
+                }
+        );
+    }
+
+    // Загрузка всех контактов
+    private void getAllContacts(Map<String, Resume> resumes) {
+        if (resumes.isEmpty()) {
+            return;
+        }
+        sqlHelper.execute("SELECT resume_uuid, type, value FROM contact ORDER BY resume_uuid, type ASC",
+                ps -> {
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        String uuid = rs.getString("resume_uuid").trim();
+                        Resume r = resumes.get(uuid);
+                        if (r != null) {
+                            String typeStr = rs.getString("type");
+                            String value = rs.getString("value");
+                            if (typeStr != null && value != null) {
+                                ContactType type = ContactType.valueOf(typeStr);
+                                r.addContact(type, value);
+                            }
+                        }
+                    }
+                    return null; // Void
+                }
+        );
+    }
+
+    private void getAllSections(Map<String, Resume> resumes) {
+        if (resumes.isEmpty()) {
+            return;
+        }
+        sqlHelper.execute(
+                "SELECT resume_uuid, section_type, value as section_value \n" +
+                        "FROM section ORDER BY resume_uuid, section_type",
+                ps -> {
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        String uuid = rs.getString("resume_uuid").trim();
+                        Resume r = resumes.get(uuid);
+                        if (r != null) {
+                            String sectionType = rs.getString("section_type");
+                            String value = rs.getString("section_value");
+                            if (sectionType != null && value != null) {
+                                addSection(rs, r);
+                            }
+                        }
+                    }
+                    return null;
                 }
         );
     }
