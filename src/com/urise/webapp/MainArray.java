@@ -1,14 +1,14 @@
 package com.urise.webapp;
 
+import static com.urise.webapp.ResumeTestData.createTestResume;
+
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.storage.Storage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import static com.urise.webapp.ResumeTestData.createTestResume;
 
 /**
  * Interactive test for ArrayStorage implementation.
@@ -27,7 +27,8 @@ public class MainArray {
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new XmlStreamSerializer());
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new JsonStreamSerializer());
     // private static final Storage ARRAY_STORAGE = new PathStorage(dir, new DataStreamSerializer());
-    private static final Storage ARRAY_STORAGE = new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "f;c6iw4q1n-,73bz");
+    // private static final Storage ARRAY_STORAGE = new SqlStorage("jdbc:postgresql://localhost:5432/resumes", "postgres", "f;c6iw4q1n-,73bz");
+    private static final Storage ARRAY_STORAGE = Config.get().getStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

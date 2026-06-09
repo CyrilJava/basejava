@@ -46,7 +46,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.2</version> <!-- или 4.0.x -->
+            <version>4.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
@@ -95,10 +95,10 @@
     </pluginRepositories>
 
     <build>
-        <!--sourceDirectory>D:\Study\Java2025\basejava\src</sourceDirectory>
-        <testSourceDirectory>D:\Study\Java2025\basejava\test</testSourceDirectory-->
-        <outputDirectory>D:\Study\Java2025\basejava\target\classes</outputDirectory>
-        <testOutputDirectory>D:\Study\Java2025\basejava\target\test-classes</testOutputDirectory>
+        <!--outputDirectory>D:\Study\Java2025\basejava\target\classes</outputDirectory>
+        <testOutputDirectory>D:\Study\Java2025\basejava\target\test-classes</testOutputDirectory-->
+        <outputDirectory>target/classes</outputDirectory>
+        <testOutputDirectory>target/test-classes</testOutputDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -122,7 +122,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

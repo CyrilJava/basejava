@@ -15,14 +15,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
-    public final SqlHelper sqlHelper;
+    private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         try { // это необходимо для работы драйвера postgresql с Tomcat
@@ -160,8 +158,7 @@ public class SqlStorage implements Storage {
         }
         getAllContacts(resumes);
         getAllSections(resumes);
-        return resumes.values().stream().sorted(Comparator.comparing(Resume::getFullName)
-                .thenComparing(Resume::getUuid)).collect(Collectors.toList());
+        return new ArrayList<>(resumes.values());
     }
 
     // Получение всех резюме
@@ -244,9 +241,10 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(ResultSet rs, Resume r) throws SQLException {
-        SectionType sectionType = SectionType.valueOf(rs.getString("section_type"));
+        String type = rs.getString("section_type");
         String value = rs.getString("section_value");
-        if (value != null) {
+        if (type != null && value != null) {
+            SectionType sectionType = SectionType.valueOf(type);
             switch (sectionType) {
                 case PERSONAL:
                 case OBJECTIVE: {
@@ -257,7 +255,7 @@ public class SqlStorage implements Storage {
                 case QUALIFICATIONS: {
                     ListSection listSection =
                             new ListSection(new ArrayList<>(Arrays.asList(value.split("\n"))));
-                    r.addSection(SectionType.valueOf(rs.getString("section_type")), listSection);
+                    r.addSection(SectionType.valueOf(type), listSection);
                     break;
                 }
                 default:
