@@ -26,7 +26,7 @@ public class SqlStorage implements Storage {
         try { // это необходимо для работы драйвера postgresql с Tomcat
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
@@ -40,8 +40,8 @@ public class SqlStorage implements Storage {
                         ps.setString(2, r.getFullName());
                         ps.execute();
                     }
-                    insertContact(r, conn);
-                    insertSection(r, conn);
+                    insertContacts(r, conn);
+                    insertSections(r, conn);
                     return null;
                 }
         );
@@ -91,14 +91,14 @@ public class SqlStorage implements Storage {
                         ps.setString(1, r.getUuid());
                         ps.execute();
                     }
-                    insertContact(r, conn);
+                    insertContacts(r, conn);
                     try (PreparedStatement ps = conn.prepareStatement(
                             "DELETE FROM section \n" +
                                     "where resume_uuid = ?")) {
                         ps.setString(1, r.getUuid());
                         ps.execute();
                     }
-                    insertSection(r, conn);
+                    insertSections(r, conn);
                     return null;
                 }
         );
@@ -264,7 +264,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertContact(Resume r, Connection conn) throws SQLException {
+    private void insertContacts(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
@@ -277,7 +277,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertSection(Resume r, Connection conn) throws SQLException {
+    private void insertSections(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO section (resume_uuid, section_type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> entry : r.getSections().entrySet()) {
