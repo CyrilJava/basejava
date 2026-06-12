@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.urise</groupId>
     <artifactId>resume-db</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.10</version>
     <name>База данных резюме</name>
 
     <properties>
@@ -70,6 +70,18 @@
             <version>6.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -95,11 +107,14 @@
     </pluginRepositories>
 
     <build>
-        <!--outputDirectory>D:\Study\Java2025\basejava\target\classes</outputDirectory>
-        <testOutputDirectory>D:\Study\Java2025\basejava\target\test-classes</testOutputDirectory-->
         <outputDirectory>target/classes</outputDirectory>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
         <plugins>
+            <!--plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>1.1.10</version>
+            </plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
