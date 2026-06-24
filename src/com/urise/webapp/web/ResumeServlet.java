@@ -2,13 +2,17 @@ package com.urise.webapp.web;
 
 import com.urise.webapp.Config;
 import com.urise.webapp.model.ContactType;
+import com.urise.webapp.model.ListSection;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.SectionType;
+import com.urise.webapp.model.TextSection;
 import com.urise.webapp.storage.Storage;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
@@ -33,6 +37,27 @@ public class ResumeServlet extends HttpServlet {
                 r.addContact(type, value);
             } else {
                 r.getContacts().remove(type);
+            }
+        }
+        for (SectionType sectionType : SectionType.values()) {
+            switch (sectionType) {
+                case PERSONAL:
+                case OBJECTIVE: {
+                    r.addSection(sectionType, new TextSection(request.getParameter(sectionType.name())));
+                    break;
+                }
+                case ACHIEVEMENT:
+                case QUALIFICATIONS: {
+                    r.addSection(sectionType, new ListSection(request.getParameter(sectionType.name())
+                            .split("\\n")));
+                    break;
+                }
+                case EXPERIENCE:
+                    break;
+                case EDUCATION:
+                    break;
+                default:
+                    break;
             }
         }
         storage.update(r);

@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import static com.urise.webapp.ResumeTestData.createTestResume;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,15 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
-    // protected static final File STORAGE_DIR = new File(".\\storage");
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
-    private static final String UUID_1 = "uuid1";
+    private static final String UUID_1 = UUID.randomUUID().toString();
     private static final Resume R1 = createTestResume(UUID_1, NamesGenerator.getName(1));
-    private static final String UUID_2 = "uuid2";
+    private static final String UUID_2 = UUID.randomUUID().toString();
     private static final Resume R2 = createTestResume(UUID_2, NamesGenerator.getName(2));
-    private static final String UUID_3 = "uuid3";
+    private static final String UUID_3 = UUID.randomUUID().toString();
     private static final Resume R3 = createTestResume(UUID_3, NamesGenerator.getName(3));
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_4 = UUID.randomUUID().toString();
     private static final Resume R4 = createTestResume(UUID_4, NamesGenerator.getName(4));
 
     public AbstractStorageTest(Storage storage) {

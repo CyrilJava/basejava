@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interactive test for ArrayStorage implementation.
@@ -57,6 +58,11 @@ public class MainArray {
                 case "save":
                     // r = new Resume(uuid,NamesGenerator.getName(0));
                     r = createTestResume(uuid, NamesGenerator.getName(0));
+                    ARRAY_STORAGE.save(r);
+                    printAll();
+                    break;
+                case "q":
+                    r = createTestResume(UUID.randomUUID().toString(), NamesGenerator.getName(0));
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
