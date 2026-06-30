@@ -32,7 +32,7 @@
                 <td colspan="2"><h2><a name="type.name">${type.title}</a></h2></td>
             </tr>
             <c:choose>
-                <c:when test="${type=='OBJECTIVE' || type=='PERSONAL'}">
+                <c:when test="${type=='OBJECTIVE' || type=='PERSONAL' || type=='EXPERIENCE' || type=='EDUCATION'}">
                     <tr>
                         <td colspan="2">
                             <h3><%=section.toString()%></h3>
@@ -53,6 +53,8 @@
             </c:choose>
         </c:forEach>
     </table>
+    <br/>
+    <button type="button" onclick="window.history.back()">Назад</button>
     <br/>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

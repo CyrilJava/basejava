@@ -99,7 +99,7 @@ public class ResumeTestData {
         boolean sections = true;
         boolean textSections = true;
         boolean listSections = true;
-        boolean compSections = false;
+        boolean compSections = true;
 
         if (contacts) {
             resume.addContact(ContactType.PHONE, "+7(123)456-7890");

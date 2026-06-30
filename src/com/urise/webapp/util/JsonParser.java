@@ -5,15 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.urise.webapp.model.AbstractSection;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 
 public class JsonParser {
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(AbstractSection.class, new JsonSectionAdapter())
-            .registerTypeAdapter(LocalDate.class, new JsonLocalDateAdapter()) // для корректной работы с датой
-            // нет в видео, вероятно java ниже версии 16
-            // вопрос - можно ли класс JsonLocalDateAdapter объединить с LocalDateAdapter
-            // или JsonSectionAdapter
+            .registerTypeAdapter(LocalDate.class, new JsonLocalDateAdapter())
             .create();
 
     public static <T> T read(Reader reader, Class<T> clazz) {
@@ -22,5 +20,17 @@ public class JsonParser {
 
     public static <T> void write(T object, Writer writer) {
         GSON.toJson(object, writer);
+    }
+
+    public static <T> T read(String s, Class<T> clazz) {
+        return GSON.fromJson(s, clazz);
+    }
+
+    public static <T> String write(T object) {
+        return GSON.toJson(object);
+    }
+
+    public static <T> String write(T object, Class<T> clazz) {
+        return GSON.toJson(object, clazz);
     }
 }

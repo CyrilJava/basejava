@@ -12,7 +12,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
@@ -27,6 +26,7 @@ public class ResumeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
         Resume r = storage.get(uuid);
@@ -53,9 +53,9 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 }
                 case EXPERIENCE:
+                case EDUCATION: {
                     break;
-                case EDUCATION:
-                    break;
+                }
                 default:
                     break;
             }

@@ -1,13 +1,10 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.AbstractSection;
-import com.urise.webapp.model.ContactType;
-import com.urise.webapp.model.ListSection;
-import com.urise.webapp.model.Resume;
-import com.urise.webapp.model.SectionType;
-import com.urise.webapp.model.TextSection;
+import com.urise.webapp.model.*;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.JsonParser;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -258,11 +255,24 @@ public class SqlStorage implements Storage {
                     r.addSection(SectionType.valueOf(type), listSection);
                     break;
                 }
+                case EXPERIENCE:
+                case EDUCATION: {
+                    r.addSection(sectionType, JsonParser.read(value, AbstractSection.class));
+                    break;
+                }
                 default:
                     break;
             }
         }
     }
+    /* private void addSection(ResultSet rs, Resume r) throws SQLException {
+        String content = rs.getString("content");
+        if (content != null) {
+            SectionType type = SectionType.valueOf(rs.getString("type"));
+            r.setSection(type, JsonParser.read(content, Section.class));
+        }
+    }*/
+
 
     private void insertContacts(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
@@ -298,6 +308,12 @@ public class SqlStorage implements Storage {
                             resultString.append(item).append("\n");
                         }
                         ps.setString(3, resultString.toString());
+                        ps.addBatch();
+                        break;
+                    }
+                    case EXPERIENCE:
+                    case EDUCATION: {
+                        ps.setString(3, JsonParser.write(entry.getValue()));
                         ps.addBatch();
                         break;
                     }
